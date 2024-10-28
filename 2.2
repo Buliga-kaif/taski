@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+double x, y;
+const double a = 2.0;
+
+// Ввод значения x с проверкой
+printf("Введите значение x: ");
+while (scanf("%lf", &x) != 1 || getchar() != '\n') {
+    printf("Неверный ввод. Пожалуйста, введите число: ");
+    while (getchar() != '\n'); // Очищаем буфер
+}
+
+// Вычисление y в зависимости от условия
+if (x >= 1 && x <= 2) {
+    y = a * pow(x, 2) * log(x);
+} else if (x < 1) {
+    y = 1;
+} else { // x > 2
+    y = exp(a * x) * cos(x);
+}
+
+// Вывод результата
+printf("Результат y = %lf\n", y);
+
+return 0;
+}
