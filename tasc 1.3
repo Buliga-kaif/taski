@@ -1,21 +1,21 @@
 #include <stdio.h>
 
+// Функция: main
+// Описание: Главная функция программы, которая вычисляет силу тяжести для заданной массы.
 int main() {
-double mass; // Масса мешка в кг
-double force_of_gravity; // Сила тяжести в Н
-double weight; // Вес в Н
+    double mass; // Масса мешка в килограммах (кг)
+    double force_of_gravity; // Сила тяжести в ньютонах (Н)
 
-// Ввод данных от пользователя  
-printf("M potato: "); 
-scanf_s("%lf", &mass); 
+    // Ввод данных от пользователя
+    printf("Введите массу картошки (в кг): "); 
+    scanf("%lf", &mass); // Считываем массу, введенную пользователем
 
-// Вычисление силы тяжести и веса  
-force_of_gravity = mass * 9.81; 
-weight = force_of_gravity; 
+    // Вычисление силы тяжести
+    force_of_gravity = mass * 9.81; // Sила тяжести вычисляется по формуле F = m * g, где g ≈ 9.81 м/с²
 
-// Вывод результата  
-printf("F: %.2f Н\n", force_of_gravity); 
-printf("Ves: %.2f Н\n", weight); 
+    // Вывод результата
+    printf("Сила тяжести (F): %.2f Н\\n", force_of_gravity); // Выводим силу тяжести с двумя знаками после запятой
+    printf("Вес: %.2f Н\\n", force_of_gravity); // Можно заменить на force_of_gravity
 
-return 0; 
-}\
+    return 0; // Завершение программы
+}
