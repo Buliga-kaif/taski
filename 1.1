@@ -1,20 +1,32 @@
 #include <stdio.h>
 #include <math.h>
 
+// Функция a принимает два аргумента x и y и возвращает вычисленное значение
 double a(double x, double y);
+
+// Функция b принимает три аргумента x, y и z и возвращает вычисленное значение
 double b(double x, double y, double z);
 
+// Константы для значений переменных
+const double X = 1.426;
+const double Y = -1.22;
+const double Z = 3.5;
+
 int main() {
-const double x = 1.426, y = -1.22, z = 3.5;
-printf("%lf\n%lf\n%lf\n%lf\n%lf\n", x, y, z, a(x, y), b(x, y, z));
+    // Вывод значений переменных и результатов функций a и b
+    printf("%lf\\n%lf\\n%lf\\n%lf\\n%lf\\n", X, Y, Z, a(X, Y), b(X, Y, Z));
+
+    return 0; // Завершаем программу с ненулевым статусом
 }
 
 double a(double x, double y) {
-double answer = (2 * cos(x - (M_PI / 6))) / (0.5 + pow(sin(y), 2));
-return answer;
+    // Вычисление значения по формуле
+    double answer = (2 * cos(x - (M_PI / 6))) / (0.5 + pow(sin(y), 2));
+    return answer; // Возвращаем вычисленный результат
 }
 
 double b(double x, double y, double z) {
-double answer = (1 + pow(z, 2)) / (3 + (pow(z, 2) / 5));
-return answer;
+    // Вычисление значения по формуле
+    double answer = (1 + pow(z, 2)) / (3 + (pow(z, 2) / 5));
+    return answer; // Возвращаем вычисленный результат
 }
