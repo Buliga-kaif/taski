@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+typedef enum {
+PERIMETER = 1,
+AREA = 2
+} CalculationType;
+
+int main() {
+double a, b; // Длины катетов
+CalculationType choice; // Выбор пользователя
+double perimeter, area;
+
+// Ввод длин катетов с проверкой 
+printf("Введите длину первого катета (положительное число): "); 
+while (scanf("%lf", &a) != 1 || a <= 0) { 
+    printf("Ошибка ввода. Пожалуйста, введите положительное число: "); 
+    while(getchar() != '\n'); // Очистка буфера 
+} 
+
+printf("Введите длину второго катета (положительное число): "); 
+while (scanf("%lf", &b) != 1 || b <= 0) { 
+    printf("Ошибка ввода. Пожалуйста, введите положительное число: "); 
+    while(getchar() != '\n'); // Очистка буфера 
+} 
+
+// Выбор формулы 
+printf("Выберите, что хотите вычислить:\n"); 
+printf("1. Периметр\n"); 
+printf("2. Площадь\n"); 
+while (scanf("%d", &choice) != 1 || (choice != PERIMETER && choice != AREA)) { 
+    printf("Ошибка ввода. Пожалуйста, введите 1 для периметра или 2 для площади: "); 
+    while(getchar() != '\n'); // Очистка буфера 
+} 
+
+// Вычисления 
+if (choice == PERIMETER) { 
+    perimeter = a + b + (sqrt(a * a + b * b)); // Периметр 
+    printf("Периметр прямоугольного треугольника: %.2f\n", perimeter); 
+} else if (choice == AREA) { 
+    area = 0.5 * a * b; // Площадь 
+    printf("Площадь прямоугольного треугольника: %.2f\n", area); 
+} 
+
+return 0; 
+}
