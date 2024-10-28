@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <math.h>
+
+double function(double x) {
+return 0.29 * pow(x, 3) + x - 1.2502;
+}
+
+int main() {
+double x_start = 0.0; // Начальное значение x
+double x_end = 2.0; // Конечное значение x
+double delta_x = 0.2; // Шаг
+
+printf(" x\t\t y\n");
+printf("-----------------------\n");
+
+for (double x = x_start; x <= x_end; x += delta_x) {
+    double y = function(x);
+
+    // Проверка возможности расчета
+    if (!isfinite(y)) {
+        printf("%.2lf\t Невозможно вычислить\n", x);
+    } else {
+        printf("%.2lf\t %.5lf\n", x, y);
+    }
+}
+
+return 0;
+}
