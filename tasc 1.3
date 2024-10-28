@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main() {
+double mass; // Масса мешка в кг
+double force_of_gravity; // Сила тяжести в Н
+double weight; // Вес в Н
+
+// Ввод данных от пользователя  
+printf("M potato: "); 
+scanf_s("%lf", &mass); 
+
+// Вычисление силы тяжести и веса  
+force_of_gravity = mass * 9.81; 
+weight = force_of_gravity; 
+
+// Вывод результата  
+printf("F: %.2f Н\n", force_of_gravity); 
+printf("Ves: %.2f Н\n", weight); 
+
+return 0; 
+}\
