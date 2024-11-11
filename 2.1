@@ -1,46 +1,68 @@
 #include <stdio.h>
-#include <math.h> // Подключаем библиотеку для математических функций
+#include <stdlib.h>  // Для функции exit()
+#include <math.h>    // Для функции sqrt()
 
-// Определяем перечисление для выбора типа вычислений
+// Определяем перечислимый тип для выбора формулы
 typedef enum {
-    PERIMETER = 1, // 1 - Периметр
-    AREA = 2       // 2 - Площадь
+    PERIMETER,
+    AREA
 } CalculationType;
 
+void calculate_perimeter(double a, double b) {
+    // Формула для нахождения гипотенузы
+    double c = sqrt(pow(a, 2) + pow(b, 2));
+    // Формула для нахождения периметра
+    double perimeter = a + b + c;
+    printf("Периметр треугольника: %.2f\n", perimeter);
+}
+
+void calculate_area(double a, double b) {
+    // Формула для нахождения площади
+    double area = 0.5 * a * b;
+    printf("Площадь треугольника: %.2f\n", area);
+}
+
 int main() {
-    double a, b;             // Длины катетов
-    CalculationType choice;  // Выбор пользователя
-    double perimeter, area;  // Переменные для хранения результатов
+    double a, b;
+    int choice;
 
-    // Ввод длин катетов с проверкой
-    printf("Введите длину первого катета (положительное число): ");
+    // Ввод длин катетов
+    printf("Прямоугольный треугольник:\n");
+    printf("Введите длину первого катета: ");
     while (scanf("%lf", &a) != 1 || a <= 0) {
-        printf("Ошибка ввода. Пожалуйста, введите положительное число: ");
-        while(getchar() != '\\n'); // Очистка буфера
+        fflush(stdin);
+        printf("Ошибка! Длина должна быть положительным числом.\n");
+        printf("Попробуйте снова: ");
     }
 
-    printf("Введите длину второго катета (положительное число): ");
+    printf("Введите длину второго катета: ");
     while (scanf("%lf", &b) != 1 || b <= 0) {
-        printf("Ошибка ввода. Пожалуйста, введите положительное число: ");
-        while(getchar() != '\\n'); // Очистка буфера
+        fflush(stdin);
+        printf("Ошибка! Длина должна быть положительным числом.\n");
+        printf("Попробуйте снова: ");
     }
 
-    // Выбор формулы
-    printf("Выберите, что хотите вычислить:\\n");
-    printf("1. Периметр\\n");
-    printf("2. Площадь\\n");
-    while (scanf("%d", &choice) != 1 || (choice != PERIMETER && choice != AREA)) {
-        printf("Ошибка ввода. Пожалуйста, введите 1 для периметра или 2 для площади: ");
-        while(getchar() != '\\n'); // Очистка буфера
+    // Выбор формулы для вычислений
+    printf("\nВыберите формулу для вычислений:\n");
+    printf(" Периметр\n");
+    printf(" Площадь\n");
+    while (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
+        fflush(stdin);
+        printf("Ошибка! Выберите 1 или 2.\n");
+        printf("Попробуйте снова: ");
     }
 
-    // Вычисления
-    if (choice == PERIMETER) {
-        perimeter = a + b + sqrt(a * a + b * b); // Периметр
-        printf("Периметр прямоугольного треугольника: %.2f\\n", perimeter);
-    } else if (choice == AREA) {
-        area = 0.5 * a * b; // Площадь
-        printf("Площадь прямоугольного треугольника: %.2f\\n", area);
+    // Использование switch-case для вызова нужной функции
+    switch (choice) {
+    case 1:
+        calculate_perimeter(a, b);
+        break;
+    case 2:
+        calculate_area(a, b);
+        break;
+    default:
+        printf("Что-то пошло не так...\n");
+        exit(EXIT_FAILURE);
     }
 
     return 0;
