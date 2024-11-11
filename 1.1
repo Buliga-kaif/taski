@@ -16,7 +16,7 @@ double a(double x, double y);
  * @param x Первый аргумент.
  * @param y Второй аргумент.
  * @param z Третий аргумент.
- * @return Вычисленное значение по формуле (1 + z²) / (3 + (z² / 5)).
+ * @return Вычисленное значение по формуле.
  */
 double b(double x, double y, double z);
 
@@ -32,14 +32,14 @@ int main() {
     return 0; // Завершаем программу с нулевым статусом
 }
 
-double a(double x, double y) {
+const double a(const double x, const double y) {
     // Вычисление значения по формуле
-    double answer = (2 * cos(x - (M_PI / 6))) / (0.5 + pow(sin(y), 2));
-    return answer; // Возвращаем вычисленный результат
+   
+    return (2 * cos(x - (M_PI / 6))) / (0.5 + pow(sin(y), 2)) ; // Возвращаем вычисленный результат
 }
 
-double b(double x, double y, double z) {
+const double b(const double x, const double y, const double z) {
     // Вычисление значения по формуле
-    double answer = (1 + pow(z, 2)) / (3 + (pow(z, 2) / 5));
-    return answer; // Возвращаем вычисленный результат
+ 
+    return (1 + pow(z, 2)) / (3 + (pow(z, 2) / 5)); // Возвращаем вычисленный результат
 }
