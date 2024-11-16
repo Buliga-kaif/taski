@@ -6,9 +6,8 @@
  *
  * @param x Первый аргумент.
  * @param y Второй аргумент.
- * @return Вычисленное значение по формуле (2 * cos(x - π/6)) / (0.5 + sin²(y)).
  */
-double a(double x, double y);
+double getA(double x, double y);
 
 /**
  * @brief Функция b принимает три аргумента x, y и z и возвращает вычисленное значение.
@@ -18,28 +17,24 @@ double a(double x, double y);
  * @param z Третий аргумент.
  * @return Вычисленное значение по формуле.
  */
-double b(double x, double y, double z);
-
-// Константы для значений переменных
-const double X = 1.426;
-const double Y = -1.22;
-const double Z = 3.5;
+double getB(double x, double y, double z);
 
 int main() {
-    // Вывод значений переменных и результатов функций a и b
-    printf("%lf\n%lf\n%lf\n%lf\n%lf\n", X, Y, Z, a(X, Y), b(X, Y, Z));
+    const double x = 1.426;
+    const double y = -1.22;
+    const double z = 3.5;
+    const double a = getA(x, y, z);
+	const double b = getB(x, y, z);
+    
+    printf("%lf\n%lf\n%lf\n%lf\n%lf\n", x, y, z, a(x, y), b(x, y, z));
 
-    return 0; // Завершаем программу с нулевым статусом
+    return 0; 
 }
 
-const double a(const double x, const double y) {
-    // Вычисление значения по формуле
-   
-    return (2 * cos(x - (M_PI / 6))) / (0.5 + pow(sin(y), 2)) ; // Возвращаем вычисленный результат
+double GetA(const double x, const double y) {
+    return (2 * cos(x - (M_PI / 6))) / (0.5 + sin(y) * sin(y));
 }
 
-const double b(const double x, const double y, const double z) {
-    // Вычисление значения по формуле
- 
-    return (1 + pow(z, 2)) / (3 + (pow(z, 2) / 5)); // Возвращаем вычисленный результат
+double GetB(const double x, const double y, const double z) {
+    return (1 + pow(z, 2)) / (3 + (pow(z, 2) / 5)); 
 }
