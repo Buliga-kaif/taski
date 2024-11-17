@@ -13,7 +13,12 @@ int main(void) {
 
     
     printf("Введите длину ребра куба: ");
-    scanf("%f", &edge_length); 
+    while (scanf("%f", &edge_length)  != 1 || edge_length <= 0) {
+        fflush(stdin);
+        printf("Ошибка! Длина должна быть положительным числом.\n");
+        printf("Попробуйте снова: ");
+    }
+
 
     float face_area = edge_length * edge_length;
 
