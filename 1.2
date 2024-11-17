@@ -1,25 +1,29 @@
-#include <stdio.h>
+#include <stdio.h> 
 
+/**
+ * @brief Главная функция программы
+ * 
+ * Данная программа вычисляет площадь грани, площадь полной поверхности и объем куба
+ * на основе введенной длины его ребра. Результаты выводятся на экран.
+ *
+ * @return int 
+ */
 int main(void) {
-    float edge_length;
+    float edge_length; 
+
     
-   
     printf("Введите длину ребра куба: ");
-    scanf("%f", &edge_length);
-    
-   
+    scanf("%f", &edge_length); 
+
     float face_area = edge_length * edge_length;
 
-    
     float total_surface_area = 6 * face_area;
 
-   
     float volume = edge_length * edge_length * edge_length;
 
-   
-    printf("Площадь грани куба: %.2f\n", face_area);
-    printf("Площадь полной поверхности куба: %.2f\n", total_surface_area);
-    printf("Объем куба: %.2f\n", volume);
+    printf("Площадь грани куба: %.2f\n", face_area); 
+    printf("Площадь полной поверхности куба: %.2f\n", total_surface_area); 
+    printf("Объем куба: %.2f\n", volume); 
 
-    return 0;
+    return 0; 
 }
