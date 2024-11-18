@@ -1,34 +1,40 @@
 #include <stdio.h> 
+#include<math.h> 
+#include<stdlib.h> 
 
 /**
  * @brief Главная функция программы
- * 
+ *
  * Эта программа вычисляет силу тяжести (вес) мешка с картошкой
  * на основании введенной массы мешка и значения гравитационной постоянной.
  * Результаты выводятся на экран.
  *
- * @return int 
+ * @return int
  */
+double getWeight(const double mass, const double g);
+
 int main(void) {
-    float mass; 
-    float g;    
+    float mass;
+    float g;
 
-    printf("Введите массу мешка с картошкой в кг: ");
-     while ( scanf("%f", &mass)  != 1 || mass <= 0) {
-        fflush(stdin);
-        printf("Ошибка! Длина должна быть положительным числом.\n");
-        printf("Попробуйте снова: ");
-    }
-
-  
-    printf("Введите значение гравитационной постоянной (g) в м/с²: ");
-    scanf("%f", &g); 
-    
-
-    float weight = mass * g;
-
-
-    printf("Сила тяжести и вес мешка: %.2f Н\n", weight); 
-
-    return 0; 
+    printf("Enter mass:\t");
+    const double mass = input();
+    printf("Enter g:\t");
+    const double g = input();
+    printf("Weight :\t%lf\n",getWeight(mass,g));
+    return 0;
 }
+double input(void) {
+    double number;
+    if (!scanf_s("%lf", &number)) {
+        printf("Input Error\n");
+        exit(EXIT_FAILURE);
+    }
+    return number;
+}
+
+
+    double getWeight(const double mass, const double g) {
+        const int ConversionFactor = 1000;
+        return (mass * g);
+    }
