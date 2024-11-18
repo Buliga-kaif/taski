@@ -7,7 +7,7 @@
  * @param x Первый аргумент.
  * @param y Второй аргумент.
  */
-double getA(double x, double y);
+double getA(const double x, const double y);
 
 /**
  * @brief Функция b принимает три аргумента x, y и z и возвращает вычисленное значение.
@@ -17,14 +17,14 @@ double getA(double x, double y);
  * @param z Третий аргумент.
  * @return Вычисленное значение по формуле.
  */
-double getB(double x, double y, double z);
+double getB(const double x,const  double y,const double z);
 
 int main() {
     const double x = 1.426;
     const double y = -1.22;
     const double z = 3.5;
     const double a = getA(x, y, z);
-	const double b = getB(x, y, z);
+    const double b = getB(x, y, z);
     
     printf("%lf\n%lf\n%lf\n%lf\n%lf\n", x, y, z, a(x, y), b(x, y, z));
 
