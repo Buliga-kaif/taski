@@ -1,44 +1,72 @@
 
+#define _USE_MATH_DEFINES 
 #include<stdio.h> 
 #include<math.h> 
-#include<stdlib.h>
+#include<stdlib.h> 
 
-/**
- * @brief Главная функция программы
- *
- * Данная программа вычисляет площадь грани, площадь полной поверхности и объем куба
- * на основе введенной длины его ребра. Результаты выводятся на экран.
- *
- * @return int
- */
-double getFace_area(const double leght);
+/*
+ * @brief Функция ввода числа типа double с консоли с проверкой на корректность ввода. 
+ * @return Возвращает введенное с консоли число. 
+*/ 
+double input(void);
 
-double geTtotal_surface_area(const double face_area);
-double getVolume(const double leght);
+/*
+ * @brief Функция расчета площади грани куба.
+ * @param length Длина ребра куба.
+ * @return Возвращает площадь грани куба.
+*/
+double getFaceArea(const double length);
 
+/*
+ * @brief Функция расчета площади полной поверхности куба.
+ * @param face_area Площадь грани.
+ * @return Возвращает площадь полной поверхности куба.
+*/
+double getTotalSurfaceArea(const double face_area);
+
+/*
+ * @brief Функция расчета объема куба.
+ * @param length Длина ребра куба.
+ * @return Возвращает объем куба.
+*/
+double getVolume(const double length);
+
+/*
+ * @brief Точка входа в программу.
+ * @return Возвращает в случае успеха.
+*/
 int main(void) {
-    float length;
-    printf("leght:\t");
-    const double leght = input();
+    printf("Введите длину ребра куба:\t");
+    const double length = input();
+
+    const double face_area = getFaceArea(length);
+    const double total_surface_area = getTotalSurfaceArea(face_area);
+    const double volume = getVolume(length);
+
+    printf("Площадь грани куба: %lf\n", face_area);
+    printf("Площадь полной поверхности куба: %lf\n", total_surface_area);
+    printf("Объем куба: %lf\n", volume);
+
     return 0;
 }
-double input (void){
-    double number;
-    if (!scanf_s("%lf", &number)) {
-        printf("Input Error\n");
-        exit(EXIT_FAILURE);
-    }
-    return number;
+
+double input(void) { 
+    double number; 
+    if (!scanf_s("%lf", &number)) { 
+        printf("Ошибка ввода\n"); 
+        exit(EXIT_FAILURE); 
+    } 
+    return number; 
 }
-double getFace_area(const double leght) {
-    const int ConversionFactor = 1000;
-    return (leght*leght);
+
+double getFaceArea(const double length) {
+    return length * length;
 }
-double geTtotal_surface_area(const double face_area) {
-    const int ConversionFactor = 1000;
-    return (6* face_area);
-    }
-double getVolume(const double leght) {
-    const int ConversionFactor = 1000;
-    return (pow(leght, 3));
-    }
+
+double getTotalSurfaceArea(const double face_area) {
+    return 6 * face_area;
+}
+
+double getVolume(const double length) {
+    return pow(length, 3);
+}
