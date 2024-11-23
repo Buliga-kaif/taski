@@ -39,19 +39,16 @@ int main(void) {
     printf("Введите длину ребра куба:\t");
     const double length = input();
 
-    const double face_area = getFaceArea(length);
-    const double total_surface_area = getTotalSurfaceArea(face_area);
-    const double volume = getVolume(length);
+   printf("Площадь грани куба: %lf\n", getFaceArea(length));
+   printf("Площадь полной поверхности куба: %lf\n", getTotalSurfaceArea(getFaceArea(length)));
+   printf("Объем куба: %lf\n", getVolume(length));
 
-    printf("Площадь грани куба: %lf\n", face_area);
-    printf("Площадь полной поверхности куба: %lf\n", total_surface_area);
-    printf("Объем куба: %lf\n", volume);
 
     return 0;
 }
 
 double input(void) { 
-    double number; 
+    double number = 0.0; 
     if (!scanf_s("%lf", &number)) { 
         printf("Ошибка ввода\n"); 
         exit(EXIT_FAILURE); 
