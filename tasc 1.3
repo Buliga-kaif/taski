@@ -3,32 +3,38 @@
 #include <stdlib.h>
 
 /*
- * @brief Функция для получения веса
- * @param mass Масса мешка
- * @param g Ускорение свободного падения
- * @return Вес (сила тяжести)
+ * @brief Вычисляет вес (силу тяжести) объекта
+ * @param mass Масса объекта в килограммах
+ * @param g Ускорение свободного падения в м/с²
+ * @return Возвращает вес объекта в ньютонах
  */
 double getWeight(const double mass, const double g);
 
 /*
+ * @brief Вводит число с проверкой
+ * @return Введенное число типа double
+ * Выводит сообщение об ошибке и завершает программу в случае некорректного ввода.
+ */
+double input(void);
+
+/*
  * @brief Главная функция программы
- * @return 0, если программа работает корректно
+ * Запрашивает у пользователя массу объекта и рассчитывает его вес
+ * с использованием фиксированного значения ускорения свободного падения.
+ * Результат выводится на экран.
+ * @return 0, если программа завершилась успешно.
  */
 int main(void) {
     printf("Enter mass:\t");
     const double mass = input();
-    const double g = 9.81; // Ускорение свободного падения (постоянная)
+    const double g = 9.81; 
     printf("Weight:\t%lf\n", getWeight(mass, g));
     printf("gravity:\t%lf\n", getWeight(mass, g));
     return 0;
 }
 
-/*
- * @brief Функция для ввода числа
- * @return Введенное число
- */
 double input(void) {
-    double number = 0.0; // Инициализация переменной
+    double number = 0.0; 
     if (!scanf_s("%lf", &number)) {
         printf("Input Error\n");
         exit(EXIT_FAILURE);
@@ -39,3 +45,4 @@ double input(void) {
 double getWeight(const double mass, const double g) {
     return (mass * g);
 }
+
