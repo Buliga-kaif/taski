@@ -1,9 +1,8 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
-#include<string.h>
-#include<limits.h>
-#include<float.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <float.h>
+#include <locale.h>  
 
 /*
  * @brief функция ввода числа типа int из консоли с проверкой на корректность ввода.
@@ -16,6 +15,12 @@ int inputInt(void);
  * @return Возвращает введенное из консоли число типа double.
 */
 double inputDouble(void);
+
+/*
+ * @brief функция ввода положительного числа типа double из консоли с проверкой на корректность ввода.
+ * @return Возвращает введенное из консоли положительное число типа double.
+*/
+double inputPositiveDouble(void);
 
 /*
  * @brief функция расчета периметра прямоугольного треугольника.
@@ -38,8 +43,7 @@ double calculateArea(const double a, const double b);
  * @param perimeter команда для вычисления периметра.
  * @param area команда для вычисления площади.
 */
-enum Triangle
-{
+enum Triangle {
     perimeter = 1,
     area
 };
@@ -48,26 +52,20 @@ enum Triangle
 * @brief Точка входа в программу
 * @return Возвращает код ошибки
 */
-int main(void)
-{
+int main(void) {
+    setlocale(LC_ALL, ""); 
     printf("Введите номер команды:\n\
         %d - рассчитать периметр треугольника\n\
         %d - рассчитать площадь треугольника\n", perimeter, area);
     const int command = inputInt();
 
     printf("Введите длину первого катета: ");
-    const double a = inputDouble();
+    const double a = inputPositiveDouble();
 
     printf("Введите длину второго катета: ");
-    const double b = inputDouble();
+    const double b = inputPositiveDouble();
 
-    if (a <= 0 || b <= 0) {
-        printf("Ошибка ввода (длины катетов должны быть положительными)");
-        return 1;
-    }
-
-    switch (command)
-    {
+    switch (command) {
     case perimeter:
         printf("Периметр треугольника: %lf\n", calculatePerimeter(a, b));
         break;
@@ -107,3 +105,13 @@ double inputDouble(void) {
     }
     return a;
 }
+
+double inputPositiveDouble(void) {
+    double value = inputDouble();
+    if (value <= DBL_EPSILON) {
+        printf("Ошибка ввода: число должно быть положительным\n");
+        exit(EXIT_FAILURE);
+    }
+    return value;
+}
+
