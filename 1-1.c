@@ -23,10 +23,8 @@ int main() {
     const double x = 1.426;
     const double y = -1.22;
     const double z = 3.5;
-    const double a = getA(x, y, z);
-    const double b = getB(x, y, z);
-    
-    printf("%lf\n%lf\n%lf\n%lf\n%lf\n", x, y, z, a(x, y), b(x, y, z));
+  
+    printf("%lf\n%lf\n%lf\n%lf\n%lf\n", x, y, z, getA(x, y, z), getB(x, y, z));
 
     return 0; 
 }
