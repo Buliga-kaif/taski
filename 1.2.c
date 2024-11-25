@@ -1,0 +1,69 @@
+
+#define _USE_MATH_DEFINES 
+#include<stdio.h> 
+#include<math.h> 
+#include<stdlib.h> 
+
+/*
+ * @brief Функция ввода числа типа double с консоли с проверкой на корректность ввода. 
+ * @return Возвращает введенное с консоли число. 
+*/ 
+double input(void);
+
+/*
+ * @brief Функция расчета площади грани куба.
+ * @param length Длина ребра куба.
+ * @return Возвращает площадь грани куба.
+*/
+double getFaceArea(const double length);
+
+/*
+ * @brief Функция расчета площади полной поверхности куба.
+ * @param face_area Площадь грани.
+ * @return Возвращает площадь полной поверхности куба.
+*/
+double getTotalSurfaceArea(const double face_area);
+
+/*
+ * @brief Функция расчета объема куба.
+ * @param length Длина ребра куба.
+ * @return Возвращает объем куба.
+*/
+double getVolume(const double length);
+
+/*
+ * @brief Точка входа в программу.
+ * @return Возвращает в случае успеха.
+*/
+int main(void) {
+    printf("Введите длину ребра куба:\t");
+    const double length = input();
+
+   printf("Площадь грани куба: %lf\n", getFaceArea(length));
+   printf("Площадь полной поверхности куба: %lf\n", getTotalSurfaceArea(getFaceArea(length)));
+   printf("Объем куба: %lf\n", getVolume(length));
+
+
+    return 0;
+}
+
+double input(void) { 
+    double number = 0.0; 
+    if (!scanf_s("%lf", &number)) { 
+        printf("Ошибка ввода\n"); 
+        exit(EXIT_FAILURE); 
+    } 
+    return number; 
+}
+
+double getFaceArea(const double length) {
+    return length * length;
+}
+
+double getTotalSurfaceArea(const double face_area) {
+    return 6 * face_area;
+}
+
+double getVolume(const double length) {
+    return pow(length, 3);
+}
