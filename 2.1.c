@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <float.h>
+#include <locale.h>  
+
+/**
+ * @brief функция ввода числа типа int из консоли с проверкой на корректность ввода.
+ * @return Возвращает введенное из консоли число типа int.
+*/
+int inputInt(void);
+
+/**
+ * @brief функция ввода числа типа double из консоли с проверкой на корректность ввода.
+ * @return Возвращает введенное из консоли число типа double.
+*/
+double inputDouble(void);
+
+/**
+ * @brief функция ввода положительного числа типа double из консоли с проверкой на корректность ввода.
+ * @return Возвращает введенное из консоли положительное число типа double.
+*/
+double inputPositiveDouble(void);
+
+/**
+ * @brief функция расчета периметра прямоугольного треугольника.
+ * @param a длина первого катета.
+ * @param b длина второго катета.
+ * @return Возвращает значение периметра.
+*/
+double calculatePerimeter(const double a, const double b);
+
+/**
+ * @brief функция расчета площади прямоугольного треугольника.
+ * @param a длина первого катета.
+ * @param b длина второго катета.
+ * @return Возвращает значение площади.
+*/
+double calculateArea(const double a, const double b);
+
+/**
+ * @brief перечисления команд вычисления параметров треугольника.
+ * @param perimeter команда для вычисления периметра.
+ * @param area команда для вычисления площади.
+*/
+enum Triangle {
+    perimeter = 1,
+    area
+};
+
+/**
+* @brief Точка входа в программу
+* @return Возвращает код ошибки
+*/
+int main(void) {
+    setlocale(LC_ALL, ""); 
+    printf("Введите номер команды:\n\
+        %d - рассчитать периметр треугольника\n\
+        %d - рассчитать площадь треугольника\n", perimeter, area);
+    const int command = inputInt();
+
+    printf("Введите длину первого катета: ");
+    const double a = inputPositiveDouble();
+
+    printf("Введите длину второго катета: ");
+    const double b = inputPositiveDouble();
+
+    switch (command) {
+    case perimeter:
+        printf("Периметр треугольника: %lf\n", calculatePerimeter(a, b));
+        break;
+    case area:
+        printf("Площадь треугольника: %lf\n", calculateArea(a, b));
+        break;
+    default:
+        printf("Ошибка ввода (неправильная команда)");
+        return 1;
+    }
+    return 0;
+}
+
+double calculatePerimeter(const double a, const double b) {
+    double c = sqrt(a * a + b * b);
+    return a + b + c;
+}
+
+double calculateArea(const double a, const double b) {
+    return (a * b) / 2;
+}
+
+int inputInt(void) {
+    int a = 0;
+    if (scanf("%d", &a) != 1) {
+        printf("Ошибка ввода\n");
+        exit(EXIT_FAILURE);
+    }
+    return a;
+}
+
+double inputDouble(void) {
+    double a = 0;
+    if (scanf("%lf", &a) != 1) {
+        printf("Ошибка ввода\n");
+        exit(EXIT_FAILURE);
+    }
+    return a;
+}
+
+double inputPositiveDouble(void) {
+    double value = inputDouble();
+    if (value <= DBL_EPSILON) {
+        printf("Ошибка ввода: число должно быть положительным\n");
+        exit(EXIT_FAILURE);
+    }
+    return value;
+}
+
