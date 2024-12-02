@@ -1,18 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <locale.h>  
+#include <locale.h>
 
+/*
+ * @brief Заполняет массив числами, случайными или пользовательскими.
+ * @param array Указатель на первый элемент массива.
+ * @param size Размер массива.
+ * @param useRandom Если равно 1, заполняет случайными числами; если 0, запрашивает ввод от пользователя.
+ */
 void fillArray(int* array, size_t size, int useRandom);
+
+/*
+ * @brief Выводит массив на экран.
+ * @param array Указатель на первый элемент массива.
+ * @param size Размер массива.
+ */
 void printArray(const int* array, size_t size);
+
+/*
+ * @brief Вычисляет произведение четных элементов массива.
+ * @param array Указатель на первый элемент массива.
+ * @param size Размер массива.
+ * @return Произведение четных элементов. Возвращает 0, если нет четных элементов.
+ */
 long long productOfEven(const int* array, size_t size);
+
+/*
+ * @brief Заменяет элементы на нечетных индексах квадратами их индексов.
+ * @param array Указатель на первый элемент массива.
+ * @param size Размер массива.
+ */
 void replaceOddIndexWithSquares(int* array, size_t size);
+
+/*
+ * @brief Проверяет, имеются ли положительные элементы с остатком 2 при делении на k.
+ * @param array Указатель на первый элемент массива.
+ * @param size Размер массива.
+ * @param k Значение делителя.
+ * @return 1, если найдены такие элементы, иначе 0.
+ */
 int hasPositiveModuloK(const int* array, size_t size, int k);
 
 int main() {
     setlocale(LC_ALL, "");
     size_t n;
     int k;
+
     printf("Введите размер массива: ");
     scanf("%zu", &n);
 
