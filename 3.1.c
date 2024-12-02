@@ -11,43 +11,33 @@
  * @param x Значение аргумента x.
  * @return Результат вычисления значения функции y при аргументе x.
  */
-double y(const double x) {
-    return 0.29 * pow(x, 3) + x - 1.2502;
-}
+double y(const double x);
 
 /*
  * @brief Функция проверки правильности ввода границ интервала.
  * @param leftBoarder Значение левой границы интервала.
  * @param rightBoarder Значение правой границы интервала.
  */
-void checkBoardersOfInterval(const double leftBoarder, const double rightBoarder) {
-    if (leftBoarder > rightBoarder) {
-        printf("Input error (the left border should not be greater than the right one)\n");
-        exit(EXIT_FAILURE);
-    }
-}
+void checkBoardersOfInterval(const double leftBoarder, const double rightBoarder);
 
 /*
  * @brief Функция ввода числа типа double с консоли.
  * @return Возвращает введенное с консоли число типа double.
  */
-double inputDouble() {
-    double number = 0.0;
-    while (scanf("%lf", &number) != 1) {
-        printf("Input error. Please enter a number: ");
-        while (getchar() != '\n');
-    }
-    return number;
-}
+double inputDouble(void);
 
 /*
  * @brief Функция для проверки существования функции y при аргументе x.
  * @param x Значение аргумента x.
  * @return Результат проверки существования функции y при аргументе x.
  */
-bool isFunctionExists(const double x) {
-    return isfinite(y(x));
-}
+bool isFunctionExists(const double x);
+
+/*
+ * @brief Функция для ввода и проверки корректности шага интервала.
+ * @return Возвращает положительное значение шага интервала.
+ */
+double inputPositiveStep(void);
 
 /*
  * @brief Точка входа в программу.
@@ -62,10 +52,7 @@ int main(void) {
     checkBoardersOfInterval(leftBoarder, rightBoarder);
 
     printf("Enter the interval step:\t");
-    double dx;
-    while ((dx = inputDouble()) <= 0.0) {
-        printf("Step must be positive. Please enter again:\t");
-    }
+    const double dx = inputPositiveStep();
 
     printf("x\t\t y\n");
     printf("-----------------------\n");
@@ -78,4 +65,36 @@ int main(void) {
     }
 
     return 0;
+}
+
+double y(const double x) {
+    return 0.29 * pow(x, 3) + x - 1.2502;
+}
+
+void checkBoardersOfInterval(const double leftBoarder, const double rightBoarder) {
+    if (leftBoarder > rightBoarder) {
+        printf("Input error (the left border should not be greater than the right one)\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+double inputDouble(void) {
+    double number = 0.0;
+    while (scanf("%lf", &number) != 1) {
+        printf("Input error. Please enter a number: ");
+        while (getchar() != '\n');
+    }
+    return number;
+}
+
+bool isFunctionExists(const double x) {
+    return isfinite(y(x));
+}
+
+double inputPositiveStep(void) {
+    double dx = 0.0;
+    while ((dx = inputDouble()) <= DBL_EPSILON) {
+        printf("Step must be a positive number greater than epsilon. Please enter again:\t");
+    }
+    return dx;
 }
