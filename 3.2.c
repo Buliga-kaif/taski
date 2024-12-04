@@ -22,7 +22,7 @@ float sum_e(const float e) {
     float current_ = 1;
     float sum = 0;
 
-    for (int i = 1; fabs(current_) >= e; i++) {
+    for (int i = 1; fabs(current_) >= e + DBL_EPSILON; i++) {
         sum += current_;
         current_ *= recurrence_relation(i);
     }
