@@ -37,7 +37,7 @@ int main(void) {
 
 
 double inputDouble(void) {
-    double number;
+    double number = 0;
     while (scanf("%lf", &number) != 1) {
         printf("Неверный ввод. Пожалуйста, введите число: ");
         while (getchar() != '\n');
