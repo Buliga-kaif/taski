@@ -26,12 +26,7 @@ void checkBoardersOfInterval(const double leftBoarder, const double rightBoarder
  */
 double inputDouble(void);
 
-/*
- * @brief Функция для проверки существования функции y при аргументе x.
- * @param x Значение аргумента x.
- * @return Результат проверки существования функции y при аргументе x.
- */
-bool isFunctionExists(const double x);
+
 
 /*
  * @brief Функция для ввода и проверки корректности шага интервала.
@@ -58,10 +53,7 @@ int main(void) {
     printf("-----------------------\n");
 
     for (double x = leftBoarder; x <= rightBoarder + DBL_EPSILON; x += dx) {
-        if (!isFunctionExists(x))
-            printf("%.2lf\t It is impossible to calculate\n", x);
-        else
-            printf("%.2lf\t %.5lf\n", x, y(x));
+         printf("%.2lf\t %.5lf\n", x, y(x));
     }
 
     return 0;
@@ -87,9 +79,7 @@ double inputDouble(void) {
     return number;
 }
 
-bool isFunctionExists(const double x) {
-    return isfinite(y(x));
-}
+
 
 double inputPositiveStep(void) {
     double dx = 0.0;
