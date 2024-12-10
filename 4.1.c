@@ -2,37 +2,33 @@
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
-
+#include <stdbool.h>
 /*
  * @brief Заполняет массив числами, случайными или пользовательскими.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
  * @param useRandom Если равно 1, заполняет случайными числами; если 0, запрашивает ввод от пользователя.
  */
-void fillArray(int* array, size_t size, int useRandom);
-
+void fillArray(int* array, const size_t size, const int useRandom);
 /*
  * @brief Выводит массив на экран.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
  */
-void printArray(const int* array, size_t size);
-
+void printArray(const int* array,  size_t  const size);
 /*
  * @brief Вычисляет произведение четных элементов массива.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
  * @return Произведение четных элементов. Возвращает 0, если нет четных элементов.
  */
-long long productOfEven(const int* array, size_t size);
-
+long long productOfEven(const int* array, size_t const size);
 /*
  * @brief Заменяет элементы на нечетных индексах квадратами их индексов.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
  */
-void replaceOddIndexWithSquares(int* array, size_t size);
-
+void replaceOddIndexWithSquares( int* array,const size_t const size);
 /*
  * @brief Проверяет, имеются ли положительные элементы с остатком 2 при делении на k.
  * @param array Указатель на первый элемент массива.
@@ -40,7 +36,10 @@ void replaceOddIndexWithSquares(int* array, size_t size);
  * @param k Значение делителя.
  * @return 1, если найдены такие элементы, иначе 0.
  */
-int hasPositiveModuloK(const int* array, size_t size, int k);
+int hasPositiveModuloK(const int* array,const size_t size, int k);
+
+int inputInt(const char* prompt);
+size_t inputSizeT(const char* prompt);
 /*
  * @brief Главная функция программы, выполняющая несколько операций над массивом целых чисел.
  * Функция main выполняет следующие шаги:
@@ -55,17 +54,11 @@ int hasPositiveModuloK(const int* array, size_t size, int k);
  * 9. Освобождает выделенную память и завершает программу.
  * @return 0 при успешном завершении, 1 при ошибке.
  */
-
-int main() {
+int main(void) {
     setlocale(LC_ALL, "");
-    size_t n;
-    int k;
 
-    printf("Введите размер массива: ");
-    scanf("%zu", &n);
-
-    printf("Введите число k: ");
-    scanf("%d", &k);
+    size_t n = inputSizeT("Введите размер массива: ");
+    int k = inputInt("Введите число k: ");
 
     int* array = (int*)malloc(n * sizeof(int));
     if (!array) {
@@ -73,11 +66,9 @@ int main() {
         return 1;
     }
 
-    int useRandom;
-    printf("Заполнить массив случайными числами? (1 - да, 0 - нет): ");
-    scanf("%d", &useRandom);
-
+    int useRandom = inputInt("Заполнить массив случайными числами? (1 - да, 0 - нет): ");
     fillArray(array, n, useRandom);
+
     printf("Массив:\n");
     printArray(array, n);
 
@@ -96,20 +87,28 @@ int main() {
 }
 
 void fillArray(int* array, size_t size, int useRandom) {
+    int minRange, maxRange;
+
     if (useRandom) {
+        do {
+            minRange = inputInt("Введите минимальное значение для случайных чисел: ");
+            maxRange = inputInt("Введите максимальное значение для случайных чисел: ");
+            if (minRange > maxRange) {
+                printf("Ошибка: минимальное значение не должно превышать максимальное. Попробуйте снова.\n");
+            }
+        } while (minRange > maxRange);
+
         srand(time(NULL));
         for (size_t i = 0; i < size; ++i) {
-            array[i] = rand() % 31 - 15; // Random numbers between -15 and 15
+            array[i] = minRange + rand() % (maxRange - minRange + 1);
         }
     }
     else {
         for (size_t i = 0; i < size; ++i) {
-            printf("Введите элемент %zu: ", i + 1);
-            scanf("%d", &array[i]);
+            array[i] = inputInt("Введите элемент: ");
         }
     }
 }
-
 void printArray(const int* array, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         printf("%d ", array[i]);
@@ -119,18 +118,18 @@ void printArray(const int* array, size_t size) {
 
 long long productOfEven(const int* array, size_t size) {
     long long product = 1;
-    int foundEven = 0;
+    bool foundEven = false;
     for (size_t i = 0; i < size; ++i) {
         if (array[i] % 2 == 0) {
             product *= array[i];
-            foundEven = 1;
+            foundEven = true;
         }
     }
     return foundEven ? product : 0;
 }
 
 void replaceOddIndexWithSquares(int* array, size_t size) {
-    for (size_t i = 1; i < size; i += 2) { // Start at index 1 for odd indices
+    for (size_t i = 1; i < size; i += 2) {
         array[i] = i * i;
     }
 }
@@ -142,4 +141,36 @@ int hasPositiveModuloK(const int* array, size_t size, int k) {
         }
     }
     return 0;
+}
+
+int inputInt(const char* prompt) {
+    int value;
+    while (true) {
+        printf("%s", prompt);
+        if (scanf("%d", &value) == 1) {
+            while (getchar() != '\n');
+            break;
+        }
+        else {
+            printf("Ошибка ввода. Повторите попытку.\n");
+            while (getchar() != '\n');
+        }
+    }
+    return value;
+}
+
+size_t inputSizeT(const char* prompt) {
+    size_t value;
+    while (true) {
+        printf("%s", prompt);
+        if (scanf("%zu", &value) == 1 && value > 0) {
+            while (getchar() != '\n');
+            break;
+        }
+        else {
+            printf("Ошибка ввода. Повторите попытку.\n");
+            while (getchar() != '\n');
+        }
+    }
+    return value;
 }
