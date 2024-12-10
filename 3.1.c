@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <float.h>
 
 /*
@@ -25,8 +24,6 @@ void checkBoardersOfInterval(const double leftBoarder, const double rightBoarder
  * @return Возвращает введенное с консоли число типа double.
  */
 double inputDouble(void);
-
-
 
 /*
  * @brief Функция для ввода и проверки корректности шага интервала.
@@ -53,7 +50,7 @@ int main(void) {
     printf("-----------------------\n");
 
     for (double x = leftBoarder; x <= rightBoarder + DBL_EPSILON; x += dx) {
-         printf("%.2lf\t %.5lf\n", x, y(x));
+        printf("%.2lf\t %.5lf\n", x, y(x));
     }
 
     return 0;
@@ -72,19 +69,18 @@ void checkBoardersOfInterval(const double leftBoarder, const double rightBoarder
 
 double inputDouble(void) {
     double number = 0.0;
-    while (scanf("%lf", &number) != 1) {
-        printf("Input error. Please enter a number: ");
-        while (getchar() != '\n');
+    if (scanf("%lf", &number) != 1) {
+        printf("Input error. Please enter a valid number.\n");
+        exit(EXIT_FAILURE);
     }
     return number;
 }
 
-
-
 double inputPositiveStep(void) {
-    double dx = 0.0;
-    while ((dx = inputDouble()) <= DBL_EPSILON) {
-        printf("Step must be a positive number greater than epsilon. Please enter again:\t");
+    double dx = inputDouble();
+    if (dx <= DBL_EPSILON) {
+        printf("Step must be a positive number greater than epsilon.\n");
+        exit(EXIT_FAILURE);
     }
     return dx;
 }
