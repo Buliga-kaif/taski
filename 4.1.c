@@ -15,7 +15,7 @@ void fillArray(int* array, const size_t size, const int useRandom);
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
  */
-void printArray(const int* array,  size_t  const size);
+void printArray(const int* array, size_t const size);
 /*
  * @brief Вычисляет произведение четных элементов массива.
  * @param array Указатель на первый элемент массива.
@@ -28,7 +28,7 @@ long long productOfEven(const int* array, size_t const size);
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
  */
-void replaceOddIndexWithSquares( int* array,const size_t const size);
+void replaceOddIndexWithSquares(int* array, const size_t const size);
 /*
  * @brief Проверяет, имеются ли положительные элементы с остатком 2 при делении на k.
  * @param array Указатель на первый элемент массива.
@@ -36,10 +36,45 @@ void replaceOddIndexWithSquares( int* array,const size_t const size);
  * @param k Значение делителя.
  * @return 1, если найдены такие элементы, иначе 0.
  */
-int hasPositiveModuloK(const int* array,const size_t size, int k);
-
+int hasPositiveModuloK(const int* array, const size_t size, int k);
+/*
+ * @brief Запрашивает у пользователя ввод целого числа.
+ * Печатает указанную строку запроса и ожидает корректного ввода целого числа.
+ * @param prompt Строка запроса для ввода.
+ * @return Введенное целое число.
+ */
 int inputInt(const char* prompt);
+/*
+ * @brief Запрашивает у пользователя ввод положительного целого числа (size_t).
+ * Печатает указанную строку запроса и ожидает корректного ввода положительного
+ * целого числа, соответствующего типу size_t.
+ * @param prompt Строка запроса для ввода.
+ * @return Введенное положительное целое число.
+ */
 size_t inputSizeT(const char* prompt);
+/*
+ * @brief Проверяет наличие положительных элементов, дающих остаток 2 при делении на k.
+ * @param array Указатель на первый элемент массива.
+ * @param size Размер массива.
+ * @param k Делитель.
+ * @return 1, если найдены положительные элементы с остатком 2, иначе 0.
+ */
+int hasPositiveModulo(const int* array, size_t size, int k);
+/*
+ * @brief Замена элементов массива на нечетных индексах квадратами их индексов и сохранение в новый массив.
+ * @param array Исходный массив.
+ * @param newArray Модифицированный массив.
+ * @param size Размер массива.
+ */
+void replaceOddIndicesWithSquares(const int* array, int* newArray, size_t size);
+/*
+ * @brief Процедура обработки массива: проверяет положительные элементы и выполняет замену по индексам.
+ * @param array Исходный массив.
+ * @param size Размер массива.
+ * @param newArray Модифицированный массив.
+ * @param k Делитель для проверки с остатком 2.
+ */
+void processArray(const int* array, size_t size, int* newArray, int k);
 /*
  * @brief Главная функция программы, выполняющая несколько операций над массивом целых чисел.
  * Функция main выполняет следующие шаги:
@@ -59,10 +94,13 @@ int main(void) {
 
     size_t n = inputSizeT("Введите размер массива: ");
     int k = inputInt("Введите число k: ");
-
     int* array = (int*)malloc(n * sizeof(int));
-    if (!array) {
+    int* newArray = (int*)malloc(n * sizeof(int));
+
+    if (!array || !newArray) {
         printf("Ошибка выделения памяти\n");
+        free(array);
+        free(newArray);
         return 1;
     }
 
@@ -75,14 +113,13 @@ int main(void) {
     long long product = productOfEven(array, n);
     printf("Произведение четных элементов: %lld\n", product);
 
-    replaceOddIndexWithSquares(array, n);
-    printf("Массив после замены нечетных индексов:\n");
-    printArray(array, n);
+    processArray(array, n, newArray, k);
 
-    int hasPositive = hasPositiveModuloK(array, n, k);
-    printf("Есть ли положительные элементы, делящиеся на %d с остатком 2: %s\n", k, hasPositive ? "Да" : "Нет");
+    printf("Массив после процесса:\n");
+    printArray(newArray, n);
 
     free(array);
+    free(newArray);
     return 0;
 }
 
@@ -109,6 +146,7 @@ void fillArray(int* array, size_t size, int useRandom) {
         }
     }
 }
+
 void printArray(const int* array, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         printf("%d ", array[i]);
@@ -128,19 +166,34 @@ long long productOfEven(const int* array, size_t size) {
     return foundEven ? product : 0;
 }
 
-void replaceOddIndexWithSquares(int* array, size_t size) {
-    for (size_t i = 1; i < size; i += 2) {
-        array[i] = i * i;
-    }
-}
-
-int hasPositiveModuloK(const int* array, size_t size, int k) {
+int hasPositiveModulo(const int* array, size_t size, int k) {
     for (size_t i = 0; i < size; ++i) {
         if (array[i] > 0 && array[i] % k == 2) {
             return 1;
         }
     }
     return 0;
+}
+
+void replaceOddIndicesWithSquares(const int* array, int* newArray, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        newArray[i] = array[i]; // копирование исходного массива
+    }
+
+    for (size_t i = 1; i < size; i += 2) {
+        newArray[i] = i * i;
+    }
+}
+
+void processArray(const int* array, size_t size, int* newArray, int k) {
+    if (hasPositiveModulo(array, size, k)) {
+        printf("Есть положительные числа с остатком 2.\n");
+    }
+    else {
+        printf("Положительных чисел с остатком 2 нет.\n");
+    }
+
+    replaceOddIndicesWithSquares(array, newArray, size);
 }
 
 int inputInt(const char* prompt) {
