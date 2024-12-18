@@ -220,4 +220,3 @@ int* allocateAndCheckMemory(size_t size) {
     }
     return array;
 }
-
