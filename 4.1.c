@@ -181,7 +181,7 @@ void processArray(const int* array, const size_t size, int* newArray, const int 
 }
 
 int inputInt(const char* prompt) {
-    int value;
+    int value=0;
     while (true) {
         printf("%s", prompt);
         if (scanf("%d", &value) == 1) {
