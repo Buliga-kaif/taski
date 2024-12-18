@@ -1,9 +1,9 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
 #include <stdbool.h>
+
 /*
  * @brief Заполняет массив числами, случайными или пользовательскими.
  * @param array Указатель на первый элемент массива.
@@ -21,7 +21,7 @@ void printArray(const int* array, const size_t size);
  * @brief Вычисляет произведение четных элементов массива.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
- * @return Произведение четных элементов. Возвращает 0, если нет четных элементов.
+ * @return Произведение четных элементов. Возвращает 1, если нет четных элементов.
  */
 long long productOfEven(const int* array, const size_t size);
 /*
@@ -67,16 +67,6 @@ size_t inputSizeT(const char* prompt);
 int* allocateAndCheckMemory(size_t size);
 /*
  * @brief Главная функция программы, выполняющая несколько операций над массивом целых чисел.
- * Функция main выполняет следующие шаги:
- * 1. Инициализирует локализацию для вывода строк.
- * 2. Запрашивает у пользователя размер массива n и значение k.
- * 3. Выделяет динамическую память для массива целых чисел.
- * 4. Запрашивает у пользователя заполнить массив случайными числами или вручную.
- * 5. Заполняет массив и выводит его на экран.
- * 6. Вычисляет и выводит произведение чётных элементов массива.
- * 7. Заменяет элементы на нечетных индексах их квадратами.
- * 8. Проверяет наличие положительных элементов, дающих остаток 2 при делении на k, и выводит результат.
- * 9. Освобождает выделенную память и завершает программу.
  * @return 0 при успешном завершении, 1 при ошибке.
  */
 int main(void) {
@@ -94,7 +84,7 @@ int main(void) {
     printArray(array, n);
 
     long long product = productOfEven(array, n);
-    printf("Произведение четных элементов: %lld\n", product);
+    printf("Произведение четных элементов: %lld\n", product ? product : 0);
 
     processArray(array, n, newArray, k);
 
@@ -108,7 +98,8 @@ int main(void) {
 }
 
 void fillArray(int* array, const size_t size, const int useRandom) {
-    int minRange, maxRange;
+    int minRange = 0;
+    int maxRange = 0;
 
     if (useRandom) {
         do {
@@ -170,14 +161,23 @@ void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t 
 }
 
 void processArray(const int* array, const size_t size, int* newArray, const int k) {
-    if (hasPositiveModulo(array, size, k)) {
+    switch (hasPositiveModulo(array, size, k)) {
+    case 1:
         printf("Есть положительные числа с остатком 2.\n");
-    }
-    else {
+        break;
+    case 0:
         printf("Положительных чисел с остатком 2 нет.\n");
+        break;
     }
 
     replaceOddIndicesWithSquares(array, newArray, size);
+
+    for (size_t i = 0; i < size; ++i) {
+        if (newArray[i] % 2 == 0) {
+            printf("Первый четный элемент найден: %d\n", newArray[i]);
+            break; 
+        }
+    }
 }
 
 int inputInt(const char* prompt) {
@@ -197,7 +197,7 @@ int inputInt(const char* prompt) {
 }
 
 size_t inputSizeT(const char* prompt) {
-    size_t value;
+    size_t value = 0;
     while (true) {
         printf("%s", prompt);
         if (scanf("%zu", &value) == 1 && value > 0) {
@@ -205,7 +205,7 @@ size_t inputSizeT(const char* prompt) {
             break;
         }
         else {
-                printf("Ошибка ввода. Повторите попытку.\n");
+            printf("Ошибка ввода. Повторите попытку.\n");
             while (getchar() != '\n');
         }
     }
@@ -216,7 +216,7 @@ int* allocateAndCheckMemory(size_t size) {
     int* array = (int*)malloc(size * sizeof(int));
     if (!array) {
         printf("Ошибка выделения памяти\n");
-        exit(1);
+        abort();
     }
     return array;
 }
