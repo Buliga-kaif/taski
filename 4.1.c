@@ -69,6 +69,13 @@ int* allocateAndCheckMemory(size_t size);
  * @brief Главная функция программы, выполняющая несколько операций над массивом целых чисел.
  * @return 0 при успешном завершении, 1 при ошибке.
  */
+ /*
+  * @brief Копирует элементы из одного массива в другой.
+  * @param src Указатель на исходный массив.
+  * @param dest Указатель на массив-приемник.
+  * @param size Размер массивов.
+  */
+void copyArray(const int* src, int* dest, const size_t size);
 int main(void) {
     setlocale(LC_ALL, "");
 
@@ -86,7 +93,9 @@ int main(void) {
     long long product = productOfEven(array, n);
     printf("Произведение четных элементов: %lld\n", product ? product : 0);
 
-    processArray(array, n, newArray, k);
+    copyArray(array, newArray, n);
+
+    processArray(newArray, n, newArray, k);
 
     printf("Массив после процесса:\n");
     printArray(newArray, n);
@@ -175,13 +184,13 @@ void processArray(const int* array, const size_t size, int* newArray, const int 
     for (size_t i = 0; i < size; ++i) {
         if (newArray[i] % 2 == 0) {
             printf("Первый четный элемент найден: %d\n", newArray[i]);
-            break; 
+            break;
         }
     }
 }
 
 int inputInt(const char* prompt) {
-    int value=0;
+    int value = 0;
     while (true) {
         printf("%s", prompt);
         if (scanf("%d", &value) == 1) {
@@ -219,4 +228,10 @@ int* allocateAndCheckMemory(size_t size) {
         abort();
     }
     return array;
+}
+
+void copyArray(const int* src, int* dest, const size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        dest[i] = src[i];
+    }
 }
