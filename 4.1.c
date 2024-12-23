@@ -1,81 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <locale.h>
-#include <stdbool.h>
-
-/*
- * @brief Заполняет массив числами, случайными или пользовательскими.
- * @param array Указатель на первый элемент массива.
- * @param size Размер массива.
- * @param useRandom Если равно 1, заполняет случайными числами; если 0, запрашивает ввод от пользователя.
- */
-void fillArray(int* array, const size_t size, const int useRandom);
-/*
- * @brief Выводит массив на экран.
- * @param array Указатель на первый элемент массива.
- * @param size Размер массива.
- */
-void printArray(const int* array, const size_t size);
-/*
- * @brief Вычисляет произведение четных элементов массива.
- * @param array Указатель на первый элемент массива.
- * @param size Размер массива.
- * @return Произведение четных элементов. Возвращает -1, если нет четных элементов.
- */
-long long productOfEven(const int* array, const size_t size);
-/*
- * @brief Заменяет элементы на нечетных индексах квадратами их индексов.
- * @param array Указатель на первый элемент массива.
- * @param size Размер массива.
- */
-void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t size);
-/*
- * @brief Проверяет, имеются ли положительные элементы с остатком 2 при делении на k.
- * @param array Указатель на первый элемент массива.
- * @param size Размер массива.
- * @param k Значение делителя.
- * @return 1, если найдены такие элементы, иначе 0.
- */
-int hasPositiveModulo(const int* array, const size_t size, const int k);
-/*
- * @brief Процедура обработки массива: проверяет положительные элементы и выполняет замену по индексам.
- * @param array Исходный массив.
- * @param size Размер массива.
- * @param newArray Модифицированный массив.
- * @param k Делитель для проверки с остатком 2.
- */
-void processArray(const int* array, const size_t size, int* newArray, const int k);
-/*
- * @brief Запрашивает у пользователя ввод целого числа.
- * @param prompt Строка запроса для вывода пользователю.
- * @return Введенное пользователем целое число.
- */
-int inputInt(const char* prompt);
-/*
- * @brief Запрашивает у пользователя ввод положительного целого числа (size_t).
- * @param prompt Строка запроса для вывода пользователю.
- * @return Введенное пользователем положительное целое число типа size_t.
- */
-size_t inputSizeT(const char* prompt);
-/*
- * @brief Выделяет память для массива целых чисел и проверяет успешность выделения.
- * @param size Количество элементов, для которых выделяется память.
- * @return Указатель на выделенную область памяти, если выделение успешно.
- *         Программа завершает выполнение, если выделение памяти не удалось.
- */
-int* allocateAndCheckMemory(size_t size);
-/*
- * @brief Главная функция программы, выполняющая несколько операций над массивом целых чисел.
- * @return 0 при успешном завершении, 1 при ошибке.
- */
 int main(void) {
     setlocale(LC_ALL, "");
 
     size_t n = inputSizeT("Введите размер массива: ");
     int k = inputInt("Введите число k: ");
     int* array = allocateAndCheckMemory(n);
-    int* newArray = allocateAndCheckMemory(n);
+    int* newArray = allocateAndCheckMemory(n); 
 
     int useRandom = inputInt("Заполнить массив случайными числами? (1 - да, 0 - нет): ");
     fillArray(array, n, useRandom);
@@ -86,6 +15,10 @@ int main(void) {
     long long product = productOfEven(array, n);
     printf("Произведение четных элементов: %lld\n", product >= 0 ? product : 0);
 
+    
+    for (size_t i = 0; i < n; ++i) {
+        newArray[i] = array[i]; 
+    }
     processArray(array, n, newArray, k);
 
     printf("Массив после процесса:\n");
@@ -186,10 +119,10 @@ void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t 
 
     for (size_t i = 0; i < size; ++i) {
         if (i % 2 != 0) {
-            newArray[i] = i * i; 
+            newArray[i] = i * i;
         }
         else {
-            newArray[i] = array[i]; 
+            newArray[i] = array[i];
         }
     }
 }
@@ -224,7 +157,7 @@ int inputInt(const char* prompt) {
         perror("Ошибка ввода");
         abort();
     }
-    while (getchar() != '\n'); 
+    while (getchar() != '\n');
     return value;
 }
 
@@ -235,7 +168,7 @@ size_t inputSizeT(const char* prompt) {
         perror("Ошибка ввода");
         abort();
     }
-    while (getchar() != '\n'); 
+    while (getchar() != '\n');
     return value;
 }
 
@@ -247,3 +180,4 @@ int* allocateAndCheckMemory(size_t size) {
     }
     return array;
 }
+
