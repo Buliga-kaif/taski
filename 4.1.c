@@ -142,7 +142,7 @@ void printArray(const int* array, const size_t size) {
 long long productOfEven(const int* array, const size_t size) {
     if (array == NULL || size == 0) {
         printf("Ошибка: некорректный массив или размер.\n");
-        return 0; // Возвращаем 0 в случае ошибки
+        return 0; 
     }
 
     long long product = 1;
@@ -159,7 +159,7 @@ long long productOfEven(const int* array, const size_t size) {
 int hasPositiveModulo(const int* array, const size_t size, const int k) {
     if (array == NULL || size == 0) {
         printf("Ошибка: некорректный массив или размер.\n");
-        return 0; // Возвращаем 0 в случае ошибки
+        return 0; 
     }
 
     for (size_t i = 0; i < size; ++i) {
