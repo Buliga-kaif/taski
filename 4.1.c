@@ -216,7 +216,7 @@ void processArray(const int* array, const size_t size, int* newArray, const int 
     for (size_t i = 0; i < size; ++i) {
         if (newArray[i] % 2 == 0) {
             printf("Первый четный элемент найден: %d\n", newArray[i]);
-            break;
+             abort();
         }
     }
 }
