@@ -69,13 +69,6 @@ int* allocateAndCheckMemory(size_t size);
  * @brief Главная функция программы, выполняющая несколько операций над массивом целых чисел.
  * @return 0 при успешном завершении, 1 при ошибке.
  */
- /*
-  * @brief Копирует элементы из одного массива в другой.
-  * @param src Указатель на исходный массив.
-  * @param dest Указатель на массив-приемник.
-  * @param size Размер массивов.
-  */
-void copyArray(const int* src, int* dest, const size_t size);
 int main(void) {
     setlocale(LC_ALL, "");
 
@@ -93,9 +86,7 @@ int main(void) {
     long long product = productOfEven(array, n);
     printf("Произведение четных элементов: %lld\n", product ? product : 0);
 
-    copyArray(array, newArray, n);
-
-    processArray(newArray, n, newArray, k);
+    processArray(array, n, newArray, k);
 
     printf("Массив после процесса:\n");
     printArray(newArray, n);
@@ -107,6 +98,11 @@ int main(void) {
 }
 
 void fillArray(int* array, const size_t size, const int useRandom) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return;
+    }
+
     int minRange = 0;
     int maxRange = 0;
 
@@ -132,6 +128,11 @@ void fillArray(int* array, const size_t size, const int useRandom) {
 }
 
 void printArray(const int* array, const size_t size) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return;
+    }
+
     for (size_t i = 0; i < size; ++i) {
         printf("%d ", array[i]);
     }
@@ -139,6 +140,11 @@ void printArray(const int* array, const size_t size) {
 }
 
 long long productOfEven(const int* array, const size_t size) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return 0; // Возвращаем 0 в случае ошибки
+    }
+
     long long product = 1;
     bool foundEven = false;
     for (size_t i = 0; i < size; ++i) {
@@ -151,6 +157,11 @@ long long productOfEven(const int* array, const size_t size) {
 }
 
 int hasPositiveModulo(const int* array, const size_t size, const int k) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return 0; // Возвращаем 0 в случае ошибки
+    }
+
     for (size_t i = 0; i < size; ++i) {
         if (array[i] > 0 && array[i] % k == 2) {
             return 1;
@@ -160,6 +171,11 @@ int hasPositiveModulo(const int* array, const size_t size, const int k) {
 }
 
 void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t size) {
+    if (array == NULL || newArray == NULL || size == 0) {
+        printf("Ошибка: некорректные массивы или размер.\n");
+        return;
+    }
+
     for (size_t i = 0; i < size; ++i) {
         newArray[i] = array[i];
     }
@@ -170,6 +186,11 @@ void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t 
 }
 
 void processArray(const int* array, const size_t size, int* newArray, const int k) {
+    if (array == NULL || newArray == NULL || size == 0) {
+        printf("Ошибка: некорректные массивы или размер.\n");
+        return;
+    }
+
     switch (hasPositiveModulo(array, size, k)) {
     case 1:
         printf("Есть положительные числа с остатком 2.\n");
@@ -230,8 +251,3 @@ int* allocateAndCheckMemory(size_t size) {
     return array;
 }
 
-void copyArray(const int* src, int* dest, const size_t size) {
-    for (size_t i = 0; i < size; ++i) {
-        dest[i] = src[i];
-    }
-}
