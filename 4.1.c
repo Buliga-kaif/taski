@@ -185,13 +185,13 @@ void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t 
     }
 
     for (size_t i = 0; i < size; ++i) {
-        newArray[i] = array[i];
+        if (i % 2 != 0) {
+            newArray[i] = i * i; 
+        }
+        else {
+            newArray[i] = array[i]; 
+        }
     }
-
-    newArray[1] = 1 * 1; 
-    if (size > 2) newArray[3] = 3 * 3; 
-    if (size > 4) newArray[5] = 5 * 5; 
-    
 }
 
 void processArray(const int* array, const size_t size, int* newArray, const int k) {
@@ -209,49 +209,33 @@ void processArray(const int* array, const size_t size, int* newArray, const int 
 
     replaceOddIndicesWithSquares(array, newArray, size);
 
-    
-    if (size > 0) {
-        if (newArray[0] % 2 == 0) {
-            printf("Первый четный элемент найден: %d\n", newArray[0]);
-        }
-        else if (size > 1 && newArray[1] % 2 == 0) {
-            printf("Первый четный элемент найден: %d\n", newArray[1]);
-        }
-        else if (size > 2 && newArray[2] % 2 == 0) {
-            printf("Первый четный элемент найден: %d\n", newArray[2]);
+    for (size_t i = 0; i < size; ++i) {
+        if (newArray[i] % 2 == 0) {
+            printf("Первый четный элемент найден: %d\n", newArray[i]);
+            break;
         }
     }
 }
 
 int inputInt(const char* prompt) {
     int value = 0;
-    while (true) {
-        printf("%s", prompt);
-        if (scanf("%d", &value) == 1) {
-            while (getchar() != '\n');
-            break;
-        }
-        else {
-            printf("Ошибка ввода. Повторите попытку.\n");
-            while (getchar() != '\n');
-        }
+    printf("%s", prompt);
+    if (scanf("%d", &value) != 1) {
+        perror("Ошибка ввода");
+        abort();
     }
+    while (getchar() != '\n'); 
     return value;
 }
 
 size_t inputSizeT(const char* prompt) {
     size_t value = 0;
-    while (true) {
-        printf("%s", prompt);
-        if (scanf("%zu", &value) == 1 && value > 0) {
-            while (getchar() != '\n');
-            break;
-        }
-        else {
-            printf("Ошибка ввода. Повторите попытку.\n");
-            while (getchar() != '\n');
-        }
+    printf("%s", prompt);
+    if (scanf("%zu", &value) != 1 || value == 0) {
+        perror("Ошибка ввода");
+        abort();
     }
+    while (getchar() != '\n'); 
     return value;
 }
 
