@@ -21,7 +21,7 @@ void printArray(const int* array, const size_t size);
  * @brief Вычисляет произведение четных элементов массива.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
- * @return Произведение четных элементов. Возвращает 1, если нет четных элементов.
+ * @return Произведение четных элементов. Возвращает -1, если нет четных элементов.
  */
 long long productOfEven(const int* array, const size_t size);
 /*
@@ -84,10 +84,9 @@ int main(void) {
     printArray(array, n);
 
     long long product = productOfEven(array, n);
-    printf("Произведение четных элементов: %lld\n", product ? product : 0);
+    printf("Произведение четных элементов: %lld\n", product >= 0 ? product : 0);
 
-    copyArray(array, newArray, n);
-    processArray(newArray, n, k);
+    processArray(array, n, newArray, k);
 
     printf("Массив после процесса:\n");
     printArray(newArray, n);
@@ -112,12 +111,13 @@ void fillArray(int* array, const size_t size, const int useRandom) {
             minRange = inputInt("Введите минимальное значение для случайных чисел: ");
             maxRange = inputInt("Введите максимальное значение для случайных чисел: ");
             if (minRange <= maxRange) {
-                break; 
+                break;
             }
             else {
                 printf("Ошибка: минимальное значение не должно превышать максимальное. Попробуйте снова.\n");
             }
         }
+
         srand(time(NULL));
         for (size_t i = 0; i < size; ++i) {
             array[i] = minRange + rand() % (maxRange - minRange + 1);
@@ -131,6 +131,11 @@ void fillArray(int* array, const size_t size, const int useRandom) {
 }
 
 void printArray(const int* array, const size_t size) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return;
+    }
+
     for (size_t i = 0; i < size; ++i) {
         printf("%d ", array[i]);
     }
@@ -138,6 +143,11 @@ void printArray(const int* array, const size_t size) {
 }
 
 long long productOfEven(const int* array, const size_t size) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return -1; 
+    }
+
     long long product = 1;
     bool foundEven = false;
     for (size_t i = 0; i < size; ++i) {
@@ -146,10 +156,20 @@ long long productOfEven(const int* array, const size_t size) {
             foundEven = true;
         }
     }
-    return foundEven ? product : 0;
+    return foundEven ? product : -1; 
 }
 
 int hasPositiveModulo(const int* array, const size_t size, const int k) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return 0;
+    }
+
+    if (k == 0) {
+        printf("Ошибка: деление на ноль.\n");
+        return 0; 
+    }
+
     for (size_t i = 0; i < size; ++i) {
         if (array[i] > 0 && array[i] % k == 2) {
             return 1;
@@ -158,7 +178,27 @@ int hasPositiveModulo(const int* array, const size_t size, const int k) {
     return 0;
 }
 
-void processArray(int* array, const size_t size, const int k) {
+void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t size) {
+    if (array == NULL || newArray == NULL || size == 0) {
+        printf("Ошибка: некорректные массивы или размер.\n");
+        return;
+    }
+
+    for (size_t i = 0; i < size; ++i) {
+        newArray[i] = array[i];
+    }
+
+    for (size_t i = 1; i < size; i += 2) {
+        newArray[i] = i * i;
+    }
+}
+
+void processArray(const int* array, const size_t size, int* newArray, const int k) {
+    if (array == NULL || newArray == NULL || size == 0) {
+        printf("Ошибка: некорректные массивы или размер.\n");
+        return;
+    }
+
     if (hasPositiveModulo(array, size, k)) {
         printf("Есть положительные числа с остатком 2.\n");
     }
@@ -166,51 +206,53 @@ void processArray(int* array, const size_t size, const int k) {
         printf("Положительных чисел с остатком 2 нет.\n");
     }
 
+    replaceOddIndicesWithSquares(array, newArray, size);
+
     for (size_t i = 0; i < size; ++i) {
-        if (i % 2 != 0) {
-            array[i] = i * i; 
-        }
-        if (array[i] % 2 == 0) {
-            printf("Первый четный элемент найден: %d\n", array[i]);
-            break;
+        if (newArray[i] % 2 == 0) {
+            printf("Первый четный элемент найден: %d\n", newArray[i]);
+            break; 
         }
     }
 }
 
 int inputInt(const char* prompt) {
     int value = 0;
-    printf("%s", prompt);
-    if (scanf("%d", &value) != 1) {
-        printf("Ошибка ввода.\n");
-        while (getchar() != '\n');  
-        return 0; 
+    while (true) {
+        printf("%s", prompt);
+        if (scanf("%d", &value) == 1) {
+            while (getchar() != '\n');
+            break;
+        }
+        else {
+            printf("Ошибка ввода. Повторите попытку.\n");
+            while (getchar() != '\n');
+        }
     }
-    while (getchar() != '\n');  
     return value;
 }
 
 size_t inputSizeT(const char* prompt) {
     size_t value = 0;
-    printf("%s", prompt);
-    if (scanf("%zu", &value) != 1 || value == 0) {
-        printf("Ошибка ввода. Введите положительное значение.\n");
-        return 0; 
+    while (true) {
+        printf("%s", prompt);
+        if (scanf("%zu", &value) == 1 && value > 0) {
+            while (getchar() != '\n');
+            break;
+        }
+        else {
+            printf("Ошибка ввода. Повторите попытку.\n");
+            while (getchar() != '\n');
+        }
     }
-    while (getchar() != '\n');  
     return value;
 }
 
 int* allocateAndCheckMemory(size_t size) {
     int* array = (int*)malloc(size * sizeof(int));
-    if (!array) {
-        printf("Ошибка выделения памяти\n");
-        abort();
+    if (array == NULL) {
+        perror("Ошибка выделения памяти");
+        exit(EXIT_FAILURE);
     }
     return array;
-}
-
-void copyArray(const int* src, int* dest, const size_t size) {
-    for (size_t i = 0; i < size; ++i) {
-        dest[i] = src[i];
-    }
 }
