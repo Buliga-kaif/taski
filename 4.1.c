@@ -99,18 +99,25 @@ int main(void) {
 }
 
 void fillArray(int* array, const size_t size, const int useRandom) {
+    if (array == NULL || size == 0) {
+        printf("Ошибка: некорректный массив или размер.\n");
+        return;
+    }
+
     int minRange = 0;
     int maxRange = 0;
 
     if (useRandom) {
-        do {
+        while (1) {
             minRange = inputInt("Введите минимальное значение для случайных чисел: ");
             maxRange = inputInt("Введите максимальное значение для случайных чисел: ");
-            if (minRange > maxRange) {
+            if (minRange <= maxRange) {
+                break; 
+            }
+            else {
                 printf("Ошибка: минимальное значение не должно превышать максимальное. Попробуйте снова.\n");
             }
-        } while (minRange > maxRange);
-
+        }
         srand(time(NULL));
         for (size_t i = 0; i < size; ++i) {
             array[i] = minRange + rand() % (maxRange - minRange + 1);
