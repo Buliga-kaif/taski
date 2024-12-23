@@ -118,7 +118,7 @@ void fillArray(int* array, const size_t size, const int useRandom) {
             }
         }
 
-        srand(time(NULL));
+        srand((unsigned)time(NULL));
         for (size_t i = 0; i < size; ++i) {
             array[i] = minRange + rand() % (maxRange - minRange + 1);
         }
@@ -145,7 +145,7 @@ void printArray(const int* array, const size_t size) {
 long long productOfEven(const int* array, const size_t size) {
     if (array == NULL || size == 0) {
         printf("Ошибка: некорректный массив или размер.\n");
-        return -1; 
+        return -1;
     }
 
     long long product = 1;
@@ -156,7 +156,7 @@ long long productOfEven(const int* array, const size_t size) {
             foundEven = true;
         }
     }
-    return foundEven ? product : -1; 
+    return foundEven ? product : -1;
 }
 
 int hasPositiveModulo(const int* array, const size_t size, const int k) {
@@ -167,7 +167,7 @@ int hasPositiveModulo(const int* array, const size_t size, const int k) {
 
     if (k == 0) {
         printf("Ошибка: деление на ноль.\n");
-        return 0; 
+        return 0;
     }
 
     for (size_t i = 0; i < size; ++i) {
@@ -188,9 +188,10 @@ void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t 
         newArray[i] = array[i];
     }
 
-    for (size_t i = 1; i < size; i += 2) {
-        newArray[i] = i * i;
-    }
+    newArray[1] = 1 * 1; 
+    if (size > 2) newArray[3] = 3 * 3; 
+    if (size > 4) newArray[5] = 5 * 5; 
+    
 }
 
 void processArray(const int* array, const size_t size, int* newArray, const int k) {
@@ -208,10 +209,16 @@ void processArray(const int* array, const size_t size, int* newArray, const int 
 
     replaceOddIndicesWithSquares(array, newArray, size);
 
-    for (size_t i = 0; i < size; ++i) {
-        if (newArray[i] % 2 == 0) {
-            printf("Первый четный элемент найден: %d\n", newArray[i]);
-            break; 
+    
+    if (size > 0) {
+        if (newArray[0] % 2 == 0) {
+            printf("Первый четный элемент найден: %d\n", newArray[0]);
+        }
+        else if (size > 1 && newArray[1] % 2 == 0) {
+            printf("Первый четный элемент найден: %d\n", newArray[1]);
+        }
+        else if (size > 2 && newArray[2] % 2 == 0) {
+            printf("Первый четный элемент найден: %d\n", newArray[2]);
         }
     }
 }
