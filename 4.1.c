@@ -5,12 +5,20 @@
 #include <stdbool.h>
 
 /*
+ * @brief Перечисление для выбора способа заполнения массива.
+ */
+typedef enum {
+    NO = 0,
+    YES = 1
+} FillOption;
+
+/*
  * @brief Заполняет массив числами, случайными или пользовательскими.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
- * @param useRandom Если равно 1, заполняет случайными числами; если 0, запрашивает ввод от пользователя.
+ * @param useRandom Если равно YES, заполняет случайными числами; если NO, запрашивает ввод от пользователя.
  */
-void fillArray(int* array, const size_t size, const int useRandom);
+void fillArray(int* array, const size_t size, const FillOption useRandom);
 /*
  * @brief Выводит массив на экран.
  * @param array Указатель на первый элемент массива.
@@ -25,12 +33,6 @@ void printArray(const int* array, const size_t size);
  */
 long long productOfEven(const int* array, const size_t size);
 /*
- * @brief Заменяет элементы на нечетных индексах квадратами их индексов.
- * @param array Указатель на первый элемент массива.
- * @param size Размер массива.
- */
-void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t size);
-/*
  * @brief Проверяет, имеются ли положительные элементы с остатком 2 при делении на k.
  * @param array Указатель на первый элемент массива.
  * @param size Размер массива.
@@ -38,6 +40,13 @@ void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t 
  * @return 1, если найдены такие элементы, иначе 0.
  */
 int hasPositiveModulo(const int* array, const size_t size, const int k);
+/*
+ * @brief Заменяет элементы на нечетных индексах квадратами их индексов.
+ * @param array Указатель на первый элемент массива.
+ * @param newArray Модифицированный массив.
+ * @param size Размер массива.
+ */
+void replaceOddIndicesWithSquares(const int* array, int* newArray, const size_t size);
 /*
  * @brief Процедура обработки массива: проверяет положительные элементы и выполняет замену по индексам.
  * @param array Исходный массив.
@@ -75,9 +84,9 @@ int main(void) {
     size_t n = inputSizeT("Введите размер массива: ");
     int k = inputInt("Введите число k: ");
     int* array = allocateAndCheckMemory(n);
-    int* newArray = allocateAndCheckMemory(n); 
+    int* newArray = allocateAndCheckMemory(n);
 
-    int useRandom = inputInt("Заполнить массив случайными числами? (1 - да, 0 - нет): ");
+    FillOption useRandom = (FillOption)inputInt("Заполнить массив случайными числами? (1 - да, 0 - нет): ");
     fillArray(array, n, useRandom);
 
     printf("Массив:\n");
@@ -86,14 +95,10 @@ int main(void) {
     long long product = productOfEven(array, n);
     printf("Произведение четных элементов: %lld\n", product >= 0 ? product : 0);
 
-    
-    for (size_t i = 0; i < n; ++i) {
-        newArray[i] = array[i]; 
-    }
     processArray(array, n, newArray, k);
 
-    printf("Массив после процесса:\n");
-    printArray(newArray, n);
+    printf("Изменённый массив после обработки:\n");
+    printArray(newArray, n);  // Вывод изменённого массива
 
     free(array);
     free(newArray);
@@ -101,7 +106,7 @@ int main(void) {
     return 0;
 }
 
-void fillArray(int* array, const size_t size, const int useRandom) {
+void fillArray(int* array, const size_t size, const FillOption useRandom) {
     if (array == NULL || size == 0) {
         printf("Ошибка: некорректный массив или размер.\n");
         return;
@@ -110,7 +115,7 @@ void fillArray(int* array, const size_t size, const int useRandom) {
     int minRange = 0;
     int maxRange = 0;
 
-    if (useRandom) {
+    if (useRandom == YES) {
         while (1) {
             minRange = inputInt("Введите минимальное значение для случайных чисел: ");
             maxRange = inputInt("Введите максимальное значение для случайных чисел: ");
@@ -171,7 +176,7 @@ int hasPositiveModulo(const int* array, const size_t size, const int k) {
 
     if (k == 0) {
         printf("Ошибка: деление на ноль.\n");
-        return 0;
+        exit(EXIT_FAILURE);
     }
 
     for (size_t i = 0; i < size; ++i) {
@@ -212,21 +217,14 @@ void processArray(const int* array, const size_t size, int* newArray, const int 
     }
 
     replaceOddIndicesWithSquares(array, newArray, size);
-
-    for (size_t i = 0; i < size; ++i) {
-        if (newArray[i] % 2 == 0) {
-            printf("Первый четный элемент найден: %d\n", newArray[i]);
-             abort();
-        }
-    }
 }
 
 int inputInt(const char* prompt) {
     int value = 0;
     printf("%s", prompt);
     if (scanf("%d", &value) != 1) {
-        perror("Ошибка ввода");
-        abort();
+        printf("Ошибка ввода. Программа завершает выполнение.\n");
+        exit(EXIT_FAILURE);
     }
     while (getchar() != '\n');
     return value;
@@ -236,8 +234,8 @@ size_t inputSizeT(const char* prompt) {
     size_t value = 0;
     printf("%s", prompt);
     if (scanf("%zu", &value) != 1 || value == 0) {
-        perror("Ошибка ввода");
-        abort();
+        printf("Ошибка ввода. Программа завершает выполнение.\n");
+        exit(EXIT_FAILURE);
     }
     while (getchar() != '\n');
     return value;
@@ -251,4 +249,3 @@ int* allocateAndCheckMemory(size_t size) {
     }
     return array;
 }
-
