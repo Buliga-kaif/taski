@@ -1,22 +1,14 @@
 #include "Person.h"
 
-
 Person::Person() : lastName(""), firstName(""), patronymic("") {}
-
 
 Person::Person(const string& ln, const string& fn, const string& pn)
     : lastName(ln), firstName(fn), patronymic(pn) {}
 
-
-string Person::getLastName() const {
-    return lastName;
+void Person::show() {
+    cout << lastName << " " << firstName << " " << patronymic << endl;
 }
 
-string Person::getFirstName() const {
-    return firstName;
+void Person::showFormal() {
+    cout << lastName << " " << firstName[0] << ". " << patronymic[0] << "." << endl;
 }
-
-string Person::getPatronymic() const {
-    return patronymic;
-}
-
