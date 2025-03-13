@@ -1,8 +1,9 @@
 #include "Person.h"
+#include <iostream>
+using namespace std;
 
 int main() {
     string lastName, firstName, patronymic;
-
 
     cout << "Enter last name: ";
     getline(cin, lastName);
@@ -11,24 +12,13 @@ int main() {
     cout << "Enter patronymic: ";
     getline(cin, patronymic);
 
-
     Person person(lastName, firstName, patronymic);
 
-
     cout << "FIO: ";
-    cout << person.getLastName() << " " << person.getFirstName();
-    if (!person.getPatronymic().empty()) {
-        cout << " " << person.getPatronymic();
-    }
-    cout << endl;
-
+    person.show();
 
     cout << "Initials: ";
-    cout << person.getLastName() << " " << person.getFirstName()[0] << ".";
-    if (!person.getPatronymic().empty()) {
-        cout << " " << person.getPatronymic()[0] << ".";
-    }
-    cout << endl;
+    person.showFormal();
 
     return 0;
 }
