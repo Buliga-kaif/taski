@@ -1,4 +1,3 @@
-
 #pragma once
 #include <string>
 #include <iostream>
@@ -11,13 +10,9 @@ private:
     string patronymic;
 
 public:
-   
     Person();
     Person(const string& ln, const string& fn, const string& pn = "");
 
-   
-    string getLastName() const;
-    string getFirstName() const;
-    string getPatronymic() const;
+    void show();
+    void showFormal();
 };
-
