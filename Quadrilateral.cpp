@@ -4,38 +4,45 @@
 
 Quadrilateral::Quadrilateral(const std::vector<Point>& points) : vertices(points) {
     if (vertices.size() != 4) {
-        throw std::invalid_argument("Exactly four points are required to form a quadrilateral.");
+        throw std::invalid_argument("4точки");
     }
 }
 
-double Quadrilateral::crossProduct(const Point& p1, const Point& p2, const Point& p3) {
-    return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
+double Quadrilateral::crossProduct(const Point& p1, const Point& p2, const Point& p3) const {
+    return (p2.getX() - p1.getX()) * (p3.getY() - p1.getY()) - 
+           (p2.getY() - p1.getY()) * (p3.getX() - p1.getX());
 }
 
-bool Quadrilateral::isConvex() {
+bool Quadrilateral::isConvex() const {
     bool isPositive = false;
+    bool isNegative = false;
 
     for (size_t i = 0; i < vertices.size(); ++i) {
-        double crossProd = crossProduct(vertices[i], vertices[(i+1) % 4], vertices[(i+2) % 4]);
+        double crossProd = crossProduct(vertices[i], 
+                                       vertices[(i+1) % 4], 
+                                       vertices[(i+2) % 4]);
         if (crossProd > 0) {
-            if (isPositive == false) {
-                isPositive = true;
-            }
-        } else if (crossProd < 0) {
-            if (isPositive == true) {
-                return false; // Sign change detected; not convex
-            }
+            if (isNegative) return false;
+            isPositive = true;
+        }
+        else if (crossProd < 0) {
+            if (isPositive) return false;
+            isNegative = true;
         }
     }
-    return true; // All cross products have the same sign
+    return true;
 }
 
-bool Quadrilateral::canCircumscribe() {
-    // A quadrilateral can be circumscribed if the sum of the lengths of the opposite sides are equal
-    double side1 = std::sqrt(std::pow(vertices[0].x - vertices[1].x, 2) + std::pow(vertices[0].y - vertices[1].y, 2));
-    double side2 = std::sqrt(std::pow(vertices[2].x - vertices[3].x, 2) + std::pow(vertices[2].y - vertices[3].y, 2));
-    double side3 = std::sqrt(std::pow(vertices[1].x - vertices[2].x, 2) + std::pow(vertices[1].y - vertices[2].y, 2));
-    double side4 = std::sqrt(std::pow(vertices[3].x - vertices[0].x, 2) + std::pow(vertices[3].y - vertices[0].y, 2));
+double Quadrilateral::getSideLength(size_t i, size_t j) const {
+    return std::sqrt(std::pow(vertices[i].getX() - vertices[j].getX(), 2) + 
+                    std::pow(vertices[i].getY() - vertices[j].getY(), 2));
+}
 
-    return (side1 + side3) == (side2 + side4);
+bool Quadrilateral::canCircumscribe() const {
+    double ab = getSideLength(0, 1);
+    double bc = getSideLength(1, 2);
+    double cd = getSideLength(2, 3);
+    double da = getSideLength(3, 0);
+    
+    return std::abs((ab + cd) - (bc + da)) < 1e-9;
 }
