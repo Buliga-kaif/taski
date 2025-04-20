@@ -16,4 +16,4 @@ public:
     bool canCircumscribe() const;
 };
 
-#endif 
+#endif
