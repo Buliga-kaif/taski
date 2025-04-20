@@ -1,7 +1,7 @@
 #include <iostream>
 
 class Point {
-public:
+private:
     float x, y;
 
     Point(float x = 0, float y = 0);
