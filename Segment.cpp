@@ -5,7 +5,7 @@ Segment::Segment(const Point& left, const Point& right)
 
 float Segment::calculate_ordinate(float x) const {
     if (x >= left_point.getX() && x <= right_point.getX()) {
-        return left_point.getY(); // Сегмент горизонтальный (y одинаковый)
+        return left_point.getY(); 
     } 
     throw std::out_of_range("x is out of the segment bounds");
 }
