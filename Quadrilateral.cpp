@@ -1,13 +1,14 @@
-include "Quadrilateral.h"
+#include "Quadrilateral.h"
 #include <cmath>
 #include <stdexcept>
 
 Quadrilateral::Quadrilateral(const std::vector<Point>& points) : vertices(points) {
-    if (vertices.size() != 4) {
+    const size_t REQUIRED_POINTS = 4;
+    if (vertices.size() != REQUIRED_POINTS) {
         throw std::invalid_argument("Exactly 4 points required");
     }
 
-
+  
     for (size_t i = 0; i < vertices.size(); ++i) {
         for (size_t j = i + 1; j < vertices.size(); ++j) {
             if (vertices[i].getX() == vertices[j].getX() && 
@@ -46,16 +47,17 @@ bool Quadrilateral::isConvex() const {
 
 double Quadrilateral::getSideLength(size_t i, size_t j) const {
     return std::sqrt(
-        std::pow(vertices[i].getX() - vertices[j].getX(), 2) + 
+        std::pow(vertices[i].getX() - vertices[j].getX(), 2) +
         std::pow(vertices[i].getY() - vertices[j].getY(), 2)
     );
 }
 
-bool Quadrilateral::canCircumscribe() const {
+bool Quadrilateral::canCircumscribe(double tolerance) const {
     double ab = getSideLength(0, 1);
     double bc = getSideLength(1, 2);
     double cd = getSideLength(2, 3);
     double da = getSideLength(3, 0);
 
-    return std::abs((ab + cd) - (bc + da)) < 1e-9;
+    return std::abs((ab + cd) - (bc + da)) < tolerance;
 }
+
