@@ -2,6 +2,10 @@
 #include <vector>
 #include "Quadrilateral.h"
 
+/**
+ * @brief Точка входа в программу.
+ * @details Запрашивает координаты четырёх точек, создаёт четырёхугольник и проверяет его свойства.
+ */
 int main() {
     const size_t numPoints = 4;
     const double tolerance = 1e-9;
