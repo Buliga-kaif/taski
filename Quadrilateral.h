@@ -9,7 +9,7 @@ private:
     std::vector<Point> vertices;
     
     struct Line {
-        double A, B, C; // Ax + By + C = 0
+        double A, B, C;
     };
 
     Line getLineFromPoints(const Point& p1, const Point& p2) const;
