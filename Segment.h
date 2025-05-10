@@ -3,6 +3,7 @@
 
 #include "Point.h"
 #include <stdexcept>
+#include <iostream>
 
 class Segment {
 private:
@@ -12,8 +13,11 @@ public:
     Segment(const Point& left, const Point& right);
     float calculate_ordinate(float x) const;
     void shift_left(float delta);
-    static Segment read_segment(float left_x, float left_y, float right_x, float right_y);
+    static Segment read_segment(std::istream& is);
     void display() const;
+
+    const Point& getLeft() const { return left_point; }
+    const Point& getRight() const { return right_point; }
 };
 
 #endif
