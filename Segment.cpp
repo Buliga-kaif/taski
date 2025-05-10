@@ -1,8 +1,13 @@
 #include "Segment.h"
-#include <iostream>
+#include <cmath>
 
 Segment::Segment(const Point& left, const Point& right) 
-    : left_point(left), right_point(right) {}
+    : left_point(left), right_point(right) {
+    if (std::abs(left.getX() - right.getX()) < 1e-6 && 
+        std::abs(left.getY() - right.getY()) < 1e-6) {
+        throw std::invalid_argument("Points cannot be the same");
+    }
+}
 
 float Segment::calculate_ordinate(float x) const {
     float x1 = left_point.getX();
@@ -10,12 +15,12 @@ float Segment::calculate_ordinate(float x) const {
     float x2 = right_point.getX();
     float y2 = right_point.getY();
 
-    if (x < x1 || x > x2) {
+    if (x < std::min(x1, x2) || x > std::max(x1, x2)) {
         throw std::out_of_range("x is out of the segment bounds");
     }
 
-    if (x1 == x2) return y1; // Вертикальный сегмент
-    return y1 + ((y2 - y1) / (x2 - x1)) * (x - x1); // Уравнение прямой
+    if (std::abs(x1 - x2) < 1e-6) return y1;
+    return y1 + ((y2 - y1) / (x2 - x1)) * (x - x1);
 }
 
 void Segment::shift_left(float delta) {
@@ -23,10 +28,10 @@ void Segment::shift_left(float delta) {
     right_point = Point(right_point.getX() - delta, right_point.getY());
 }
 
-Segment Segment::read_segment(float left_x, float left_y, float right_x, float right_y) {
-    Point left(left_x, left_y);
-    Point right(right_x, right_y);
-    return Segment(left, right);
+Segment Segment::read_segment(std::istream& is) {
+    float left_x, left_y, right_x, right_y;
+    is >> left_x >> left_y >> right_x >> right_y;
+    return Segment(Point(left_x, left_y), Point(right_x, right_y));
 }
 
 void Segment::display() const {
