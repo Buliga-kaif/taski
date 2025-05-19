@@ -2,31 +2,23 @@
 #include <vector>
 #include "Quadrilateral.h"
 
-/**
- * @brief Точка входа в программу.
- * @details Запрашивает координаты четырёх точек, создаёт четырёхугольник и проверяет его свойства.
- */
 int main() {
-    const size_t numPoints = 4;
-    const double tolerance = 1e-9;
-
     try {
         std::vector<Point> points;
-        for (size_t i = 0; i < numPoints; ++i) {
+        for (size_t i = 0; i < 4; ++i) {
             double x, y;
-            std::cout << "Enter coordinates for point " << i + 1 << " (x y): ";
+            std::cout << "Введите координаты точки " << i + 1 << " (x y): ";
             std::cin >> x >> y;
             points.emplace_back(x, y);
         }
 
         Quadrilateral quad(points);
-        std::cout << "Is convex: " << (quad.isConvex() ? "Yes" : "No") << "\n";
-        std::cout << "Can circumscribe: " << (quad.canCircumscribe(tolerance) ? "Yes" : "No") << "\n";
+        std::cout << "Выпуклый: " << (quad.isConvex() ? "Да" : "Нет") << "\n";
+        std::cout << "Можно описать окружность: " << (quad.canCircumscribe() ? "Да" : "Нет") << "\n";
 
-    } catch (const std::invalid_argument& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Ошибка: " << e.what() << std::endl;
         return 1;
     }
-
     return 0;
 }
