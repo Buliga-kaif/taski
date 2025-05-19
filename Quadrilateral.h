@@ -11,7 +11,7 @@
  */
 class Quadrilateral {
 private:
-    static constexpr double EPSILON = 1e-9; // Допустимая погрешность
+    static constexpr double EPSILON = 1e-9; 
     std::vector<Point> vertices;
 
     /**
