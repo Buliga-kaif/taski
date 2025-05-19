@@ -1,38 +1,34 @@
 #include "Quadrilateral.h"
 #include <cmath>
-#include <stdexcept>
 #include <algorithm>
-
+#include <array>
 
 Quadrilateral::Quadrilateral(const std::vector<Point>& points) : vertices(points) {
-    if (vertices.size() != 4) 
-        throw std::invalid_argument("Exactly 4 points required");
+    if (vertices.size() != 4) {
+        throw std::invalid_argument("Требуется ровно 4 точки");
+    }
 
-    // Проверка на дубликаты
     for (size_t i = 0; i < vertices.size(); ++i) {
         for (size_t j = i + 1; j < vertices.size(); ++j) {
-            if (vertices[i].getX() == vertices[j].getX() && 
-                vertices[i].getY() == vertices[j].getY()) {
-                throw std::invalid_argument("Duplicate points found");
+            if (vertices[i] == vertices[j]) {
+                throw std::invalid_argument("Обнаружены совпадающие точки");
             }
         }
     }
 
-    // Проверка на коллинеарность трёх точек
     for (size_t i = 0; i < vertices.size(); ++i) {
         if (areCollinear(vertices[i], vertices[(i+1)%4], vertices[(i+2)%4])) {
-            throw std::invalid_argument("Three consecutive points are collinear");
+            throw std::invalid_argument("Три точки лежат на одной прямой");
         }
     }
 }
 
-
 bool Quadrilateral::areCollinear(const Point& a, const Point& b, const Point& c) const {
-    return crossProduct(a, b, c) == 0;
+    return std::abs(crossProduct(a, b, c)) < EPSILON;
 }
 
 double Quadrilateral::crossProduct(const Point& p1, const Point& p2, const Point& p3) const {
-    return (p2.getX() - p1.getX()) * (p3.getY() - p1.getY()) - 
+    return (p2.getX() - p1.getX()) * (p3.getY() - p1.getY()) -
            (p2.getY() - p1.getY()) * (p3.getX() - p1.getX());
 }
 
@@ -45,8 +41,8 @@ Quadrilateral::Line Quadrilateral::getLineFromPoints(const Point& p1, const Poin
 }
 
 bool Quadrilateral::findIntersection(const Line& l1, const Line& l2, Point& intersection) const {
-    double det = l1.A * l2.B - l2.A * l1.B;
-    if (fabs(det) < 1e-9) return false;
+    const double det = l1.A * l2.B - l2.A * l1.B;
+    if (std::abs(det) < EPSILON) return false;
 
     intersection = Point(
         (l1.B * l2.C - l2.B * l1.C) / det,
@@ -66,41 +62,41 @@ bool Quadrilateral::isPointInsideBoundingBox(const Point& p) const {
         ymax = std::max(ymax, vertex.getY());
     }
 
-    return (p.getX() >= xmin - 1e-9 && p.getX() <= xmax + 1e-9 &&
-            p.getY() >= ymin - 1e-9 && p.getY() <= ymax + 1e-9);
+    return (p.getX() >= xmin - EPSILON && p.getX() <= xmax + EPSILON &&
+            p.getY() >= ymin - EPSILON && p.getY() <= ymax + EPSILON);
 }
 
-
 bool Quadrilateral::isConvex() const {
-    // Метод 1: Знаки векторных произведений
     bool positive = false, negative = false;
     for (size_t i = 0; i < 4; ++i) {
-        double cp = crossProduct(vertices[i], vertices[(i+1)%4], vertices[(i+2)%4]);
-        if (cp > 0) positive = true;
-        else if (cp < 0) negative = true;
+        const double cp = crossProduct(vertices[i], vertices[(i+1)%4], vertices[(i+2)%4]);
+        if (cp > EPSILON) positive = true;
+        else if (cp < -EPSILON) negative = true;
         if (positive && negative) return false;
     }
 
-    // Метод 2: Пересечение диагоналей
+  
     Line diag1 = getLineFromPoints(vertices[0], vertices[2]);
     Line diag2 = getLineFromPoints(vertices[1], vertices[3]);
-
     Point intersection;
-    if (!findIntersection(diag1, diag2, intersection)) return false;
-
-    return isPointInsideBoundingBox(intersection);
-}
-
-double Quadrilateral::getSideLength(size_t i, size_t j) const {
-    return sqrt(pow(vertices[i].getX() - vertices[j].getX(), 2) + 
-             pow(vertices[i].getY() - vertices[j].getY(), 2));
+    return findIntersection(diag1, diag2, intersection) && 
+           isPointInsideBoundingBox(intersection);
 }
 
 bool Quadrilateral::canCircumscribe(double tolerance) const {
-    double ab = getSideLength(0, 1);
-    double bc = getSideLength(1, 2);
-    double cd = getSideLength(2, 3);
-    double da = getSideLength(3, 0);
+    std::array<double, 4> sides;
+    for (size_t i = 0; i < 4; ++i) {
+        sides[i] = getSideLength(i, (i + 1) % 4);
+    }
 
-    return fabs((ab + cd) - (bc + da)) < tolerance;
+    const double sumAB_CD = sides[0] + sides[2];
+    const double sumBC_DA = sides[1] + sides[3];
+    return std::abs(sumAB_CD - sumBC_DA) < tolerance;
+}
+
+double Quadrilateral::getSideLength(size_t i, size_t j) const {
+    return std::hypot(
+        vertices[i].getX() - vertices[j].getX(),
+        vertices[i].getY() - vertices[j].getY()
+    );
 }
