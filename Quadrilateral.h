@@ -2,22 +2,24 @@
 #define QUADRILATERAL_H
 
 #include <vector>
+#include <stdexcept>
 #include "Point.h"
 
 /**
  * @class Quadrilateral
- * @brief Представляет четырёхугольник и предоставляет методы для анализа его свойств.
+ * @brief Класс для работы с четырёхугольниками и анализа их свойств.
  */
 class Quadrilateral {
 private:
+    static constexpr double EPSILON = 1e-9; // Допустимая погрешность
     std::vector<Point> vertices;
 
     /**
      * @struct Line
-     * @brief Уравнение прямой в форме Ax + By + C = 0.
+     * @brief Прямая в форме Ax + By + C = 0.
      */
     struct Line {
-        double A, B, C;
+        double A = 0, B = 0, C = 0;
     };
 
     Line getLineFromPoints(const Point& p1, const Point& p2) const;
@@ -32,24 +34,24 @@ public:
      * @brief Конструктор четырёхугольника.
      * @param points Вектор из 4 точек.
      * @throws std::invalid_argument:
-     * - Если точек не 4.
-     * - Если точки совпадают.
-     * - Если три точки коллинеарны.
+     * - Если передано не 4 точки.
+     * - Если обнаружены совпадающие точки.
+     * - Если три точки лежат на одной прямой.
      */
     Quadrilateral(const std::vector<Point>& points);
-    
+
     /**
-     * @brief Проверяет выпуклость четырёхугольника.
-     * @return true, если выпуклый.
+     * @brief Проверяет, является ли четырёхугольник выпуклым.
+     * @return true, если четырёхугольник выпуклый.
      */
     bool isConvex() const;
-    
+
     /**
-     * @brief Проверяет возможность описания окружности.
-     * @param tolerance Допустимая погрешность (по умолчанию 1e-9).
-     * @return true, если условие Птолемея выполняется.
+     * @brief Проверяет, можно ли описать окружность вокруг четырёхугольника.
+     * @param tolerance Допустимая погрешность (по умолчанию EPSILON).
+     * @return true, если AB + CD = BC + DA с заданной погрешностью.
      */
-    bool canCircumscribe(double tolerance = 1e-9) const;
+    bool canCircumscribe(double tolerance = EPSILON) const;
 };
 
 #endif
