@@ -1,55 +1,37 @@
+#include <gtest/gtest.h>
 #include "Segment.h"
-#include <cassert>
 #include <sstream>
-#include <iostream>
 
-void test_segment_creation() {
-    Point p1(1, 2);
-    Point p2(3, 4);
+TEST(SegmentTest, Creation) {
+    Point p1(1, 2), p2(3, 4);
     Segment s(p1, p2);
-    assert(std::abs(s.calculate_ordinate(2) - 3.0f < 1e-6);
+    EXPECT_NEAR(s.calculate_ordinate(2), 3.0f, Segment::EPSILON);
 }
 
-void test_same_points() {
-    try {
-        Point p1(5, 5);
-        Point p2(5, 5);
-        Segment s(p1, p2);
-        assert(false);
-    } catch (const std::invalid_argument& e) {
-        assert(std::string(e.what()) == "Points cannot be the same");
-    }
+TEST(SegmentTest, SamePoints) {
+    EXPECT_THROW(Segment(Point(5, 5), Point(5, 5)), std::invalid_argument);
 }
 
-void test_vertical_segment() {
-    Point p1(2.0f, 3.0f);
-    Point p2(2.0f + 1e-7f, 5.0f);
-    Segment s(p1, p2);
-    assert(std::abs(s.calculate_ordinate(2.0f) - 3.0f < 1e-6);
+TEST(SegmentTest, VerticalSegment) {
+    Segment s(Point(2, 3), Point(2, 5));
+    EXPECT_NEAR(s.calculate_ordinate(2), 3.0f, Segment::EPSILON);
 }
 
-void test_shift_left() {
-    Point p1(1, 1);
-    Point p2(3, 3);
-    Segment s(p1, p2);
+TEST(SegmentTest, ShiftLeft) {
+    Segment s(Point(1, 1), Point(3, 3));
     s.shift_left(1.0f);
-    assert(std::abs(s.getLeft().getX() - 0.0f) < 1e-6);
-    assert(std::abs(s.getRight().getX() - 2.0f) < 1e-6);
+    EXPECT_NEAR(s.getLeft().getX(), 0.0f, Segment::EPSILON);
+    EXPECT_NEAR(s.getRight().getX(), 2.0f, Segment::EPSILON);
 }
 
-void test_read_segment() {
-    std::istringstream iss("10 20 30 40");
+TEST(SegmentTest, ReadSegment) {
+    std::stringstream iss("10 20 30 40");
     Segment s = Segment::read_segment(iss);
-    assert(std::abs(s.getLeft().getX() - 10.0f) < 1e-6);
-    assert(std::abs(s.getLeft().getY() - 20.0f) < 1e-6);
+    EXPECT_NEAR(s.getLeft().getX(), 10.0f, Segment::EPSILON);
+    EXPECT_NEAR(s.getLeft().getY(), 20.0f, Segment::EPSILON);
 }
 
-int main() {
-    test_segment_creation();
-    test_same_points();
-    test_vertical_segment();
-    test_shift_left();
-    test_read_segment();
-    std::cout << "All tests passed!" << std::endl;
-    return 0;
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
