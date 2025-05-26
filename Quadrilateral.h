@@ -19,12 +19,12 @@ private:
      * @brief Прямая в форме общего уравнения: Ax + By + C = 0.
      */
     struct Line {
-        double A = 0.0; ///< Коэффициент A
-        double B = 0.0; ///< Коэффициент B
-        double C = 0.0; ///< Коэффициент C
+        double A = 0.0;
+        double B = 0.0; 
+        double C = 0.0; 
     };
 
-    // Приватные методы
+  
     Line getLineFromPoints(const Point& p1, const Point& p2) const;
     bool findIntersection(const Line& l1, const Line& l2, Point& intersection) const;
     bool isPointInsideBoundingBox(const Point& p) const;
