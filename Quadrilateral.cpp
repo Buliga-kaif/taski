@@ -7,7 +7,6 @@ Quadrilateral::Quadrilateral(const std::vector<Point>& points) : vertices(points
     if (vertices.size() != 4) {
         throw std::invalid_argument("Требуется ровно 4 точки");
     }
-
     for (size_t i = 0; i < vertices.size(); ++i) {
         for (size_t j = i + 1; j < vertices.size(); ++j) {
             if (vertices[i] == vertices[j]) {
@@ -15,7 +14,6 @@ Quadrilateral::Quadrilateral(const std::vector<Point>& points) : vertices(points
             }
         }
     }
-
     for (size_t i = 0; i < vertices.size(); ++i) {
         if (areCollinear(vertices[i], vertices[(i+1)%4], vertices[(i+2)%4])) {
             throw std::invalid_argument("Три точки лежат на одной прямой");
@@ -24,12 +22,12 @@ Quadrilateral::Quadrilateral(const std::vector<Point>& points) : vertices(points
 }
 
 bool Quadrilateral::areCollinear(const Point& a, const Point& b, const Point& c) const {
-    return std::abs(crossProduct(a, b, c)) < EPSILON;
+    return std::abs(crossProduct(a, b, c)) < std::numeric_limits<double>::epsilon();
 }
 
 double Quadrilateral::crossProduct(const Point& p1, const Point& p2, const Point& p3) const {
-    return (p2.getX() - p1.getX()) * (p3.getY() - p1.getY()) -
-           (p2.getY() - p1.getY()) * (p3.getX() - p1.getX());
+    return (p2.getX() - p1.getX()) * (p3.getY() - p1.getY())
+         - (p2.getY() - p1.getY()) * (p3.getX() - p1.getX());
 }
 
 Quadrilateral::Line Quadrilateral::getLineFromPoints(const Point& p1, const Point& p2) const {
@@ -42,7 +40,7 @@ Quadrilateral::Line Quadrilateral::getLineFromPoints(const Point& p1, const Poin
 
 bool Quadrilateral::findIntersection(const Line& l1, const Line& l2, Point& intersection) const {
     const double det = l1.A * l2.B - l2.A * l1.B;
-    if (std::abs(det) < EPSILON) return false;
+    if (std::abs(det) < std::numeric_limits<double>::epsilon()) return false;
 
     intersection = Point(
         (l1.B * l2.C - l2.B * l1.C) / det,
@@ -62,25 +60,26 @@ bool Quadrilateral::isPointInsideBoundingBox(const Point& p) const {
         ymax = std::max(ymax, vertex.getY());
     }
 
-    return (p.getX() >= xmin - EPSILON && p.getX() <= xmax + EPSILON &&
-            p.getY() >= ymin - EPSILON && p.getY() <= ymax + EPSILON);
+    return (p.getX() >= xmin - std::numeric_limits<double>::epsilon() 
+         && p.getX() <= xmax + std::numeric_limits<double>::epsilon() 
+         && p.getY() >= ymin - std::numeric_limits<double>::epsilon() 
+         && p.getY() <= ymax + std::numeric_limits<double>::epsilon());
 }
 
 bool Quadrilateral::isConvex() const {
     bool positive = false, negative = false;
     for (size_t i = 0; i < 4; ++i) {
         const double cp = crossProduct(vertices[i], vertices[(i+1)%4], vertices[(i+2)%4]);
-        if (cp > EPSILON) positive = true;
-        else if (cp < -EPSILON) negative = true;
+        if (cp > std::numeric_limits<double>::epsilon()) positive = true;
+        else if (cp < -std::numeric_limits<double>::epsilon()) negative = true;
         if (positive && negative) return false;
     }
 
-  
     Line diag1 = getLineFromPoints(vertices[0], vertices[2]);
     Line diag2 = getLineFromPoints(vertices[1], vertices[3]);
     Point intersection;
-    return findIntersection(diag1, diag2, intersection) && 
-           isPointInsideBoundingBox(intersection);
+    return findIntersection(diag1, diag2, intersection) 
+        && isPointInsideBoundingBox(intersection);
 }
 
 bool Quadrilateral::canCircumscribe(double tolerance) const {
