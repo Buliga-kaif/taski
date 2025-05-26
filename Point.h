@@ -8,8 +8,8 @@
  */
 class Point {
 private:
-    double x = 0.0; ///< Координата X точки
-    double y = 0.0; ///< Координата Y точки
+    double x = 0.0; 
+    double y = 0.0; 
 
 public:
     /**
