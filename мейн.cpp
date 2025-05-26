@@ -9,7 +9,8 @@ int main() {
     try {
         std::vector<Point> points;
         for (size_t i = 0; i < 4; ++i) {
-            double x,y=0;
+            double x=0;
+            double y=0;
             std::cout << "Введите координаты точки " << i + 1 << " (x y): ";
             std::cin >> x >> y;
             points.emplace_back(x, y);
