@@ -1,8 +1,8 @@
 #ifndef QUADRILATERAL_H
 #define QUADRILATERAL_H
-
 #include <vector>
 #include <stdexcept>
+#include <limits>
 #include "Point.h"
 
 /**
@@ -11,17 +11,20 @@
  */
 class Quadrilateral {
 private:
-    static constexpr double EPSILON = 1e-9; 
-    std::vector<Point> vertices;
+    static constexpr double EPSILON = std::numeric_limits<double>::epsilon(); ///< Погрешность вычислений
+    std::vector<Point> vertices; ///< Вектор вершин четырёхугольника
 
     /**
      * @struct Line
-     * @brief Прямая в форме Ax + By + C = 0.
+     * @brief Прямая в форме общего уравнения: Ax + By + C = 0.
      */
     struct Line {
-        double A = 0, B = 0, C = 0;
+        double A = 0.0; ///< Коэффициент A
+        double B = 0.0; ///< Коэффициент B
+        double C = 0.0; ///< Коэффициент C
     };
 
+    // Приватные методы
     Line getLineFromPoints(const Point& p1, const Point& p2) const;
     bool findIntersection(const Line& l1, const Line& l2, Point& intersection) const;
     bool isPointInsideBoundingBox(const Point& p) const;
@@ -40,10 +43,7 @@ public:
      */
     Quadrilateral(const std::vector<Point>& points);
 
-    /**
-     * @brief Проверяет, является ли четырёхугольник выпуклым.
-     * @return true, если четырёхугольник выпуклый.
-     */
+    /// @brief Проверяет, является ли четырёхугольник выпуклым.
     bool isConvex() const;
 
     /**
