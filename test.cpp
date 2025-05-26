@@ -31,7 +31,3 @@ TEST(SegmentTest, ReadSegment) {
     EXPECT_NEAR(s.getLeft().getY(), 20.0f, Segment::EPSILON);
 }
 
-int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
