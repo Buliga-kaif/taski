@@ -5,7 +5,7 @@
 
 template<typename T>
 T getInput(const std::string& prompt) {
-    T value;
+    T value=0;
     while (true) {
         std::cout << prompt;
         if (std::cin >> value) break;
