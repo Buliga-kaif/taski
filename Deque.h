@@ -23,7 +23,9 @@ public:
     // Конструкторы и деструктор
     Deque();
     Deque(const Deque& other);
+    Deque(const Deque&& other);
     Deque& operator=(const Deque& other);
+    Deque& operator=(const Deque&& other);
     Deque(std::initializer_list<int> init);
     ~Deque();
 
