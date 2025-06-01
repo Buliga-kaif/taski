@@ -1,6 +1,6 @@
 #include "Deque.h"
 #include <stdexcept>
-#include <sstream>
+#include <ostream>
 
 Deque::Deque() : front(nullptr), back(nullptr), size(0) {}
 
@@ -10,6 +10,14 @@ Deque::Deque(const Deque& other) : Deque() {
         push_back(current->data);
         current = current->next;
     }
+}
+
+Deque::Deque(Deque&& other) 
+    : front(other.front), back(other.back), size(other.size) 
+{
+    other.front = nullptr;
+    other.back = nullptr;
+    other.size = 0;
 }
 
 Deque::Deque(std::initializer_list<int> init) : Deque() {
@@ -32,6 +40,23 @@ Deque& Deque::operator=(const Deque& other) {
             push_back(current->data);
             current = current->next;
         }
+    }
+    return *this;
+}
+
+Deque& Deque::operator=(const Deque&& other) {
+    if (this != &other) {
+        clear();
+        
+        // Перехватываем ресурсы
+        front = other.front;
+        back = other.back;
+        size = other.size;
+        
+        // Обнуляем источник
+        other.front = nullptr;
+        other.back = nullptr;
+        other.size = 0;
     }
     return *this;
 }
@@ -65,8 +90,10 @@ int Deque::pop_front() {
     Node* temp = front;
     int val = temp->data;
     front = front->next;
-    if (front) front->prev = nullptr;
-    else back = nullptr;
+    if (front) 
+        front->prev = nullptr;
+    else 
+        back = nullptr;
     delete temp;
     size--;
     return val;
@@ -77,13 +104,14 @@ int Deque::pop_back() {
     Node* temp = back;
     int val = temp->data;
     back = back->prev;
-    if (back) back->next = nullptr;
-    else front = nullptr;
+    if (back) 
+        back->next = nullptr;
+    else 
+        front = nullptr;
     delete temp;
     size--;
     return val;
 }
-
 
 int Deque::peek_front() const {
     if (isEmpty()) throw std::out_of_range("Deque is empty");
@@ -94,7 +122,6 @@ int Deque::peek_back() const {
     if (isEmpty()) throw std::out_of_range("Deque is empty");
     return back->data;
 }
-
 
 bool Deque::isEmpty() const { return size == 0; }
 size_t Deque::getSize() const { return size; }
