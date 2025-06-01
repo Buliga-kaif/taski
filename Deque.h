@@ -1,8 +1,10 @@
+
 #ifndef DEQUE_H
 #define DEQUE_H
 
 #include <initializer_list>
 #include <string>
+#include <sstream>
 
 class Deque {
 private:
@@ -16,23 +18,24 @@ private:
     Node* front;
     Node* back;
     size_t size;
-
-    void clear(); // Вспомогательный метод для очистки дека
+    
+    void clear(); 
 
 public:
     // Конструкторы и деструктор
     Deque();
     Deque(const Deque& other);
-    Deque(const Deque&& other);
-    Deque& operator=(const Deque& other);
-    Deque& operator=(const Deque&& other);
+    Deque(Deque&& other);
     Deque(std::initializer_list<int> init);
     ~Deque();
-
-    // Операторы
+    
+    // Операторы присваивания
+    Deque& operator=(const Deque& other);
     Deque& operator=(const Deque&& other);
-    Deque& operator<<(int value); // Добавление в конец
-    Deque& operator>>(int& value); // Извлечение из начала
+    
+    // Операторы ввода/вывода
+    Deque& operator<<(int value); 
+    Deque& operator>>(int& value); 
 
     // Основные методы
     void push_front(int value);
