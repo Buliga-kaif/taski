@@ -48,12 +48,11 @@ Deque& Deque::operator=(const Deque&& other) {
     if (this != &other) {
         clear();
         
-        // Перехватываем ресурсы
+       
         front = other.front;
         back = other.back;
         size = other.size;
         
-        // Обнуляем источник
         other.front = nullptr;
         other.back = nullptr;
         other.size = 0;
