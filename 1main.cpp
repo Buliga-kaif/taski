@@ -1,5 +1,4 @@
 /**
- * @file main.cpp
  * @brief Точка входа в приложение.
  */
 #include <iostream>
