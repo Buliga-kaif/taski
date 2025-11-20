@@ -1,5 +1,8 @@
 /**
+ * @file IStreamGenerator.h
  * @brief Класс генерации значений из потока.
+ * @author MIIТ
+ * @date 2025
  */
 
 #pragma once
@@ -9,6 +12,7 @@
 namespace miit::algebra
 {
     /**
+     * @class IStreamGenerator
      * @brief Реализация генератора значений из потока (например, stdin).
      */
     class IStreamGenerator : public Generator
