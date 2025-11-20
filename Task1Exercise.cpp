@@ -7,7 +7,8 @@
 miit::algebra::Task1Exercise::Task1Exercise(Matrix<int>& mat, Generator* g)
     : Exercise(mat, g)
 {}
-void miit::algebra::Task1Exercise::Task1()
+
+void miit::algebra::Task1Exercise::Task()
 {
     int max_negative = 0;
     bool found = false;
