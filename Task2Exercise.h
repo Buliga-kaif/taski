@@ -16,19 +16,7 @@ namespace miit::algebra
         int k; ///< Значение для вставки.
 
     public:
-        /**
-         * @brief Конструктор.
-         * @param mat Матрица.
-         * @param g Генератор.
-         * @param K Значение для вставки.
-         */
         Task2Exercise(Matrix<int>& mat, Generator* g, int K);
-
-        /**
-         * @brief Выполняет задание 2.
-         */
-        void Task2() override;
-
-        void Task1() override {}
+        void Task() override;
     };
 }
