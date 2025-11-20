@@ -1,7 +1,3 @@
-/**
- * @brief Шаблонный класс одномерного массива.
- */
-
 #pragma once
 #include <string>
 #include <sstream>
@@ -21,7 +17,9 @@ namespace miit {
             Matrix();
             explicit Matrix(size_t sz);
             Matrix(const Matrix& other);
+            Matrix(Matrix&& other) noexcept;
             Matrix& operator=(const Matrix& other);
+            Matrix& operator=(Matrix&& other) noexcept;
             ~Matrix();
 
             T& operator[](size_t index);
@@ -63,6 +61,13 @@ namespace miit {
         }
 
         template<typename T>
+        Matrix<T>::Matrix(Matrix&& other) noexcept : data(other.data), size(other.size)
+        {
+            other.data = nullptr;
+            other.size = 0;
+        }
+
+        template<typename T>
         Matrix<T>& Matrix<T>::operator=(const Matrix& other)
         {
             if (this != &other) {
@@ -77,6 +82,19 @@ namespace miit {
                 else {
                     data = nullptr;
                 }
+            }
+            return *this;
+        }
+
+        template<typename T>
+        Matrix<T>& Matrix<T>::operator=(Matrix&& other) noexcept
+        {
+            if (this != &other) {
+                delete[] data;
+                data = other.data;
+                size = other.size;
+                other.data = nullptr;
+                other.size = 0;
             }
             return *this;
         }
@@ -121,4 +139,4 @@ namespace miit {
         }
 
     }
-} 
+}
