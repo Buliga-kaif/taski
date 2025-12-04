@@ -20,8 +20,8 @@ int main() {
     // Создаём объекты недвижимости
     auto house1 = std::make_shared<House>("Downtown", 150.0, 500000.0);
     auto apt1 = std::make_shared<Apartment>("Suburbs", 80.0, 300000.0);
-    auto house2 = std::make_shared<House>("Uptown", 200.0, 700000.0);      // Offer на дом
-    auto apt2 = std::make_shared<Apartment>("City Center", 90.0, 400000.0); // Demand на квартиру
+    auto house2 = std::make_shared<House>("Uptown", 200.0, 700000.0);      
+    auto apt2 = std::make_shared<Apartment>("City Center", 90.0, 400000.0); 
 
     // Создаём клиентов
     auto client1 = std::make_shared<Client>("123456", "Ivan Ivanov");
@@ -32,10 +32,10 @@ int main() {
     company->addClient(client2);
 
     // Создаём запросы
-    auto demand1 = std::make_shared<Demand>(house1, 500000.0); // Demand на дом
-    auto offer1 = std::make_shared<Offer>(apt1, 300000.0);     // Offer на квартиру
-    auto offer2 = std::make_shared<Offer>(house2, 700000.0);   // Offer на дом
-    auto demand2 = std::make_shared<Demand>(apt2, 400000.0);   // Demand на квартиру
+    auto demand1 = std::make_shared<Demand>(house1, 500000.0); 
+    auto offer1 = std::make_shared<Offer>(apt1, 300000.0);     
+    auto offer2 = std::make_shared<Offer>(house2, 700000.0);   
+    auto demand2 = std::make_shared<Demand>(apt2, 400000.0);   
 
     // Добавляем запросы в компанию
     company->addRequest(demand1);
