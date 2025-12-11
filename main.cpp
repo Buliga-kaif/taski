@@ -1,70 +1,208 @@
-include <iostream>
-#include <vector>
-#include <memory>
-#include "Company.h"
+ #include <iostream>
+#include <string>
+#include "Database.h"
+#include "Offer.h"
+#include "Demand.h"
 #include "House.h"
 #include "Apartment.h"
-#include "Client.h"
-#include "Demand.h"
-#include "Offer.h"
 
-/**
- * @brief Главная функция демонстрационной программы.
- *
- * Создаёт объекты, добавляет их в компанию, и тестирует функционал.
- */
 int main() {
-    // Создаём компанию с 5% комиссией
-    auto company = std::make_shared<Company>(5.0);
+    Database db("real_estate_data.txt", 5.0); // 5% commission
 
-    // Создаём объекты недвижимости
-    auto house1 = std::make_shared<House>("Downtown", 150.0, 500000.0);
-    auto apt1 = std::make_shared<Apartment>("Suburbs", 80.0, 300000.0);
-    auto house2 = std::make_shared<House>("Uptown", 200.0, 700000.0);      
-    auto apt2 = std::make_shared<Apartment>("City Center", 90.0, 400000.0); 
+  
+    std::cout << "       Welcome to Real Estate Management DB      \n";
+    std::cout << " Loading Data from File...\n";
+    std::cout << "\n List of All Clients:\n";
+    db.listClients();
 
-    // Создаём клиентов
-    auto client1 = std::make_shared<Client>("123456", "Ivan Ivanov");
-    auto client2 = std::make_shared<Client>("654321", "Petr Petrov");
+    std::cout << "\n List of All Requests (Demands & Offers):\n";
+    db.listRequests();
 
-    // Добавляем клиентов
-    company->addClient(client1);
-    company->addClient(client2);
+    std::cout << "\n" << std::string(60, '-') << "\n\n";
 
-    // Создаём запросы
-    auto demand1 = std::make_shared<Demand>(house1, 500000.0); 
-    auto offer1 = std::make_shared<Offer>(apt1, 300000.0);     
-    auto offer2 = std::make_shared<Offer>(house2, 700000.0);   
-    auto demand2 = std::make_shared<Demand>(apt2, 400000.0);   
 
-    // Добавляем запросы в компанию
-    company->addRequest(demand1);
-    company->addRequest(offer1);
-    company->addRequest(offer2);
-    company->addRequest(demand2);
 
-    // Демонстрация полиморфизма
-    std::vector<std::shared_ptr<Request>> requests = { demand1, offer1, offer2, demand2 };
-    for (const auto& req : requests) {
-        std::cout << "Type: " << req->getType() << ", Property Type: " << req->getProperty()->getType()
-            << ", Location: " << req->getProperty()->getLocation() << ", Price: " << req->getPrice() << "\n";
-    }
+    std::cout << "Available Commands:\n";
+    std::cout << "  add_client       Add a new client\n";
+    std::cout << "  add_demand       Add a new demand\n";
+    std::cout << "  add_offer        Add a new offer\n";
+    std::cout << "  list_clients     Show all clients\n";
+    std::cout << "  list_requests    Show all demands and offers\n";
+    std::cout << "  show_offers      Show all offers for a property type\n";
+    std::cout << "  show_demands     Show all demands for a property type\n";
+    std::cout << "  show_client      Show client info by passport ID\n";
+    std::cout << "  find_request     Find request by price, location, area\n";
+    std::cout << "  show_profit      Show company's profit\n";
+    std::cout << "  show_popular     Show most popular requests\n";
+    std::cout << "  help             Show this message\n";
+    std::cout << "  exit             Save and exit\n\n";
 
-    std::cout << "\nAll Offers for Houses:\n";
-    company->showAllOffers("House");
+    std::string command;
 
-    std::cout << "\nAll Demands for Apartments:\n";
-    company->showAllDemands("Apartment");
+    while (true) {
+        std::cout << " Enter Command \n";
+  
+        std::cin >> command;
 
-    std::cout << "\nClient by Passport '123456':\n";
-    company->showClientByPassport("123456");
+        if (command == "help") {
+            std::cout << "\n Available Commands:\n";
+            std::cout << "  add_client      — Add a new client\n";
+            std::cout << "  add_demand      — Add a new demand\n";
+            std::cout << "  add_offer       — Add a new offer\n";
+            std::cout << "  list_clients    — Show all clients\n";
+            std::cout << "  list_requests   — Show all demands and offers\n";
+            std::cout << "  show_offers     — Show all offers for a property type\n";
+            std::cout << "  show_demands    — Show all demands for a property type\n";
+            std::cout << "  show_client     — Show client info by passport ID\n";
+            std::cout << "  find_request    — Find request by price, location, area\n";
+            std::cout << "  show_profit     — Show company's profit\n";
+            std::cout << "  show_popular    — Show most popular requests\n";
+            std::cout << "  help            — Show this message\n";
+            std::cout << "  exit            — Save and exit\n\n";
+        }
+        else if (command == "add_client") {
+            std::string id, name;
+            std::cout << "\n Adding New Client...\n";
+            std::cout << "  Enter Passport ID: ";
+            std::cin >> id;
+            std::cout << "  Enter Full Name: ";
+            std::cin.ignore();
+            getline(std::cin, name);
+            db.addClient(id, name);
+            std::cout << " Client successfully added!\n\n";
+        }
+        else if (command == "add_demand") {
+            std::string propType, location;
+            double area, propPrice, reqPrice;
+            std::cout << "\n Adding New Demand...\n";
+            std::cout << "  Enter Property Type (House/Apartment): ";
+            std::cin >> propType;
+            std::cout << "  Enter Location: ";
+            std::cin.ignore();
+            getline(std::cin, location);
+            std::cout << "  Enter Property Area: ";
+            std::cin >> area;
+            std::cout << "  Enter Property Price: ";
+            std::cin >> propPrice;
+            std::cout << "  Enter Request Price: ";
+            std::cin >> reqPrice;
 
-    std::cout << "\nProfit: " << company->calculateProfit() << "\n";
+            std::shared_ptr<Property> prop;
+            if (propType == "House") {
+                prop = std::make_shared<House>(location, area, propPrice);
+            }
+            else if (propType == "Apartment") {
+                prop = std::make_shared<Apartment>(location, area, propPrice);
+            }
+            else {
+                std::cout << " Invalid property type. Skipping.\n\n";
+                continue;
+            }
 
-    std::cout << "\nMost Popular Requests:\n";
-    auto popular = company->getMostPopularRequests();
-    for (const auto& req : popular) {
-        std::cout << req->getType() << " for " << req->getProperty()->getType() << " at " << req->getProperty()->getLocation() << "\n";
+            auto demand = std::make_shared<Demand>(prop, reqPrice);
+            db.addRequest(demand);
+            std::cout << " Demand successfully added!\n\n";
+        }
+        else if (command == "add_offer") {
+            std::string propType, location;
+            double area, propPrice, reqPrice;
+            std::cout << "\n Adding New Offer...\n";
+            std::cout << "  Enter Property Type (House/Apartment): ";
+            std::cin >> propType;
+            std::cout << "  Enter Location: ";
+            std::cin.ignore();
+            getline(std::cin, location);
+            std::cout << "  Enter Property Area: ";
+            std::cin >> area;
+            std::cout << "  Enter Property Price: ";
+            std::cin >> propPrice;
+            std::cout << "  Enter Request Price: ";
+            std::cin >> reqPrice;
+
+            std::shared_ptr<Property> prop;
+            if (propType == "House") {
+                prop = std::make_shared<House>(location, area, propPrice);
+            }
+            else if (propType == "Apartment") {
+                prop = std::make_shared<Apartment>(location, area, propPrice);
+            }
+            else {
+                std::cout << " Invalid property type. Skipping.\n\n";
+                continue;
+            }
+
+            auto offer = std::make_shared<Offer>(prop, reqPrice);
+            db.addRequest(offer);
+            std::cout << " Offer successfully added!\n\n";
+        }
+        else if (command == "list_clients") {
+            std::cout << "\n List of All Clients:\n";
+            db.listClients();
+            std::cout << "\n";
+        }
+        else if (command == "list_requests") {
+            std::cout << "\n List of All Requests (Demands & Offers):\n";
+            db.listRequests();
+            std::cout << "\n";
+        }
+        else if (command == "show_offers") {
+            std::string type;
+            std::cout << "\n Enter Property Type (House/Apartment): ";
+            std::cin >> type;
+            std::cout << "\n All Offers for '" << type << "':\n";
+            db.showAllOffers(type);
+            std::cout << "\n";
+        }
+        else if (command == "show_demands") {
+            std::string type;
+            std::cout << "\n Enter Property Type (House/Apartment): ";
+            std::cin >> type;
+            std::cout << "\n All Demands for '" << type << "':\n";
+            db.showAllDemands(type);
+            std::cout << "\n";
+        }
+        else if (command == "show_client") {
+            std::string id;
+            std::cout << "\n Enter Passport ID: ";
+            std::cin >> id;
+            std::cout << "\n Client Info:\n";
+            db.showClientByPassport(id);
+            std::cout << "\n";
+        }
+        else if (command == "find_request") {
+            double price, area;
+            std::string location;
+            std::cout << "\n Searching for Request...\n";
+            std::cout << "  Enter Price: ";
+            std::cin >> price;
+            std::cout << "  Enter Location: ";
+            std::cin.ignore();
+            getline(std::cin, location);
+            std::cout << "  Enter Area: ";
+            std::cin >> area;
+            std::cout << "\n Results:\n";
+            db.findRequestByParams(price, location, area);
+            std::cout << "\n";
+        }
+        else if (command == "show_profit") {
+            std::cout << "\n Company Profit Summary:\n";
+            db.showProfit();
+            std::cout << "\n";
+        }
+        else if (command == "show_popular") {
+            std::cout << "\n Most Popular Requests:\n";
+            db.showMostPopularRequests();
+            std::cout << "\n";
+        }
+        else if (command == "exit") {
+            std::cout << "\n Saving database...";
+            db.saveToFile();
+            std::cout << "\n Goodbye!\n";
+            break;
+        }
+        else {
+            std::cout << "\n Unknown command. Type 'help' for available commands.\n\n";
+        }
     }
 
     return 0;
