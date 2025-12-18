@@ -8,11 +8,18 @@
 #include <memory>
 #include <map>
 #include <string>
+#include <set>
+
+struct PropertyComparator;
 
 class Company {
 private:
     std::vector<std::shared_ptr<Client>> clients;
     std::vector<std::shared_ptr<Request>> requests;
+    
+    
+    std::set<std::shared_ptr<Property>, PropertyComparator> properties;
+
     double commissionPercent;
 
 public:
@@ -20,6 +27,8 @@ public:
 
     void addClient(std::shared_ptr<Client> client);
     void addRequest(std::shared_ptr<Request> request);
+    size_t getUniquePropertyCount() const { return properties.size(); }
+    void listUniqueProperties() const;
 
     void showAllOffers(const std::string& type) const;
     void showAllDemands(const std::string& type) const;
