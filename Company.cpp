@@ -54,7 +54,7 @@ std::vector<std::shared_ptr<Request>> Company::findRequests(
     return result;
 }
 
-// НОВОЕ: поиск по ценовому диапазону
+
 std::vector<std::shared_ptr<Request>> Company::findOffersByPriceRange(
     double minPrice, double maxPrice, const std::string& propertyType
 ) const {
