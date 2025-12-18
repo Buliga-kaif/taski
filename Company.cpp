@@ -10,6 +10,24 @@ void Company::addClient(std::shared_ptr<Client> client) {
 
 void Company::addRequest(std::shared_ptr<Request> request) {
     requests.push_back(request);
+    
+    if (request && request->getProperty()) {
+        properties.insert(request->getProperty());
+    }
+}
+
+void Company::listUniqueProperties() const {
+    if (properties.empty()) {
+        std::cout << "No unique properties registered.\n";
+        return;
+    }
+    std::cout << "Unique Properties (" << properties.size() << "):\n";
+    for (const auto& prop : properties) {
+        std::cout << "- " << prop->getType()
+                  << " at " << prop->getLocation()
+                  << ", " << prop->getArea() << " m², "
+                  << prop->getPrice() << "\n";
+    }
 }
 
 void Company::showAllOffers(const std::string& type) const {
@@ -53,7 +71,6 @@ std::vector<std::shared_ptr<Request>> Company::findRequests(
     }
     return result;
 }
-
 
 std::vector<std::shared_ptr<Request>> Company::findOffersByPriceRange(
     double minPrice, double maxPrice, const std::string& propertyType
