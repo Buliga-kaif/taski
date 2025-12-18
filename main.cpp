@@ -92,10 +92,11 @@ int main()
         break;
     }
 
+   
     std::cout << "Original array: " << mat.toString() << std::endl;
 
     // Task 1
-    Task1Exercise t1(mat, new RandomGenerator(-10, 10));
+    Task1Exercise t1(mat);
     t1.Task();
     std::cout << "After task 1: " << mat.toString() << std::endl;
 
@@ -108,6 +109,11 @@ int main()
     Task2Exercise t2(mat, new RandomGenerator(-10, 10), k);
     t2.Task();
     std::cout << "After task 2: " << mat.toString() << std::endl;
+
+    // Task 3
+    Task3Exercise t3(mat);
+    Matrix<int> resultArray = t3.Task();
+    std::cout << "Result of task 3 (new array A): " << resultArray.toString() << std::endl;
 
     return 0;
 }
