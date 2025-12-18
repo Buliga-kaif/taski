@@ -4,8 +4,8 @@
 
 #include "Task1Exercise.h"
 
-miit::algebra::Task1Exercise::Task1Exercise(Matrix<int>& mat, Generator* g)
-    : Exercise(mat, g)
+miit::algebra::Task1Exercise::Task1Exercise(Matrix<int>& mat)
+    : matrix(mat)
 {}
 
 void miit::algebra::Task1Exercise::Task()
