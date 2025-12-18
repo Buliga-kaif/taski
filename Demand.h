@@ -7,18 +7,24 @@
 /**
  * @brief Класс, представляющий спрос на недвижимость.
  *
- * Наследуется от Request.
+ * Наследуется от Request и реализует виртуальные методы.
  */
 class Demand : public Request {
 public:
     /**
      * @brief Конструктор спроса.
      * @param prop Объект недвижимости.
-     * @param p Цена.
+     * @param p Цена, по которой клиент хочет купить.
      */
-    Demand(std::shared_ptr<Property> prop, double p);
+    using Request::Request;  
 
-    std::string getType() const override;
+    RequestType getEnumType() const override {
+        return RequestType::Demand;
+    }
+
+    std::string getType() const override {
+        return "Demand";
+    }
 };
 
-#endif
+#endif 
