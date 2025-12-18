@@ -6,7 +6,7 @@
 
 class Apartment : public Property {
 public:
-    Apartment(const std::string& loc, double a, double p)
+    Apartment(const std::string& loc,const double a,const double p)
         : Property(loc, a, p) {}
 
     std::string getType() const override { return "Apartment"; }
