@@ -8,9 +8,43 @@
 #include "Demand.h"
 #include "Offer.h"
 
+namespace Config {    
+    const std::string DATA_FILENAME = "real_estate_data.txt";
+    const double COMMISSION_PERCENT = 5.0;
+    const std::string TYPE_HOUSE = "House";
+    const std::string TYPE_APARTMENT = "Apartment";
+    const std::string REQUEST_OFFER = "Offer";
+    const std::string REQUEST_DEMAND = "Demand";
+    const std::string MSG_WELCOME = "  Real Estate Management System ";
+    const std::string MSG_SAVING = " Saving data...";
+    const std::string MSG_GOODBYE = " Goodbye!";
+    const std::string MSG_INVALID_INPUT = " Invalid input. Please enter a number.";
+    const std::string MSG_INVALID_PROPERTY = " Invalid property type.";
+    const std::string MSG_DEMAND_ADDED = "Demand added.\n";
+    const std::string MSG_OFFER_ADDED = " Offer added.\n";
+    const std::string MSG_PRICE_SWAP = " Min price > Max price. Swapping...\n";
+}
+
+namespace Menu {
+    const int ADD_CLIENT = 1;
+    const int ADD_DEMAND = 2;
+    const int ADD_OFFER = 3;
+    const int LIST_CLIENTS = 4;
+    const int LIST_REQUESTS = 5;
+    const int SHOW_OFFERS = 6;
+    const int SHOW_DEMANDS = 7;
+    const int SHOW_CLIENT = 8;
+    const int FIND_EXACT = 9;
+    const int FIND_BY_PRICE = 10;
+    const int SHOW_PROFIT = 11;
+    const int SHOW_POPULAR = 12;
+    const int EXIT = 0;
+}
+
 int main() {
-    Database db("real_estate_data.txt", 5.0);
-    std::cout << "  Real Estate Management System (v2.0)   \n";
+    Database db(Config::DATA_FILENAME, Config::COMMISSION_PERCENT);
+
+    std::cout << Config::MSG_WELCOME << "\n";
     db.listClients();
     db.listRequests();
     std::cout << "\n";
@@ -18,30 +52,30 @@ int main() {
     int choice;
     while (true) {
         std::cout << "\n--- Main Menu ---\n";
-        std::cout << " 1. Add Client\n";
-        std::cout << " 2. Add Demand\n";
-        std::cout << " 3. Add Offer\n";
-        std::cout << " 4. List All Clients\n";
-        std::cout << " 5. List All Requests\n";
-        std::cout << " 6. Show Offers by Type\n";
-        std::cout << " 7. Show Demands by Type\n";
-        std::cout << " 8. Show Client by Passport ID\n";
-        std::cout << " 9. Find Request (exact match)\n";
-        std::cout << "10. 🔍 Find Offers by Price Range\n";  
-        std::cout << "11. Show Company Profit\n";
-        std::cout << "12. Show Most Popular Requests\n";
-        std::cout << " 0. Exit (Save & Quit)\n";
+        std::cout << " " << Menu::ADD_CLIENT << ". Add Client\n";
+        std::cout << " " << Menu::ADD_DEMAND << ". Add Demand\n";
+        std::cout << " " << Menu::ADD_OFFER << ". Add Offer\n";
+        std::cout << " " << Menu::LIST_CLIENTS << ". List All Clients\n";
+        std::cout << " " << Menu::LIST_REQUESTS << ". List All Requests\n";
+        std::cout << " " << Menu::SHOW_OFFERS << ". Show Offers by Type\n";
+        std::cout << " " << Menu::SHOW_DEMANDS << ". Show Demands by Type\n";
+        std::cout << " " << Menu::SHOW_CLIENT << ". Show Client by Passport ID\n";
+        std::cout << " " << Menu::FIND_EXACT << ". Find Request (exact match)\n";
+        std::cout << " " << Menu::FIND_BY_PRICE << ".  Find Offers by Price Range\n";
+        std::cout << " " << Menu::SHOW_PROFIT << ". Show Company Profit\n";
+        std::cout << " " << Menu::SHOW_POPULAR << ". Show Most Popular Requests\n";
+        std::cout << " " << Menu::EXIT << ". Exit (Save & Quit)\n";
         std::cout << "\nEnter your choice (0-12): ";
-        
+
         if (!(std::cin >> choice)) {
-            std::cout << " Invalid input. Please enter a number.\n";
+            std::cout << Config::MSG_INVALID_INPUT << "\n";
             std::cin.clear();
             std::cin.ignore(10000, '\n');
             continue;
         }
 
         switch (choice) {
-            case 1: { 
+            case Menu::ADD_CLIENT: {
                 std::string id, name;
                 std::cout << "\n[Add Client]\n";
                 std::cout << "Passport ID: "; std::cin >> id;
@@ -50,15 +84,17 @@ int main() {
                 break;
             }
 
-            case 2: 
-            case 3: { 
-                std::cout << "\n[Add " << (choice == 2 ? "Demand" : "Offer") << "]\n";
+            case Menu::ADD_DEMAND:
+            case Menu::ADD_OFFER: {
+                const bool isDemand = (choice == Menu::ADD_DEMAND);
+                std::cout << "\n[Add " << (isDemand ? "Demand" : "Offer") << "]\n";
+
                 int typeChoice;
                 std::cout << "Property Type:\n  1. House\n  2. Apartment\n→ ";
                 std::cin >> typeChoice;
 
                 if (typeChoice != 1 && typeChoice != 2) {
-                    std::cout << " Invalid property type.\n";
+                    std::cout << Config::MSG_INVALID_PROPERTY << "\n";
                     break;
                 }
 
@@ -77,33 +113,34 @@ int main() {
                     prop = std::make_shared<Apartment>(location, area, propPrice);
                 }
 
-                if (choice == 2) {
+                if (isDemand) {
                     db.addRequest(std::make_shared<Demand>(prop, reqPrice));
-                    std::cout << "Demand added.\n";
+                    std::cout << Config::MSG_DEMAND_ADDED;
                 } else {
                     db.addRequest(std::make_shared<Offer>(prop, reqPrice));
-                    std::cout << " Offer added.\n";
+                    std::cout << Config::MSG_OFFER_ADDED;
                 }
                 break;
             }
 
-            case 4: 
+            case Menu::LIST_CLIENTS:
                 std::cout << "\n[Clients]\n";
                 db.listClients();
                 break;
 
-            case 5: 
+            case Menu::LIST_REQUESTS:
                 std::cout << "\n[All Requests]\n";
                 db.listRequests();
                 break;
 
-            case 6: 
-            case 7: { 
+            case Menu::SHOW_OFFERS:
+            case Menu::SHOW_DEMANDS: {
+                const bool isOffer = (choice == Menu::SHOW_OFFERS);
                 std::string type;
-                std::cout << "\n[" << (choice == 6 ? "Offers" : "Demands") << "]\n";
+                std::cout << "\n[" << (isOffer ? "Offers" : "Demands") << "]\n";
                 std::cout << "Property Type (House / Apartment): ";
                 std::cin >> type;
-                if (choice == 6) {
+                if (isOffer) {
                     db.showAllOffers(type);
                 } else {
                     db.showAllDemands(type);
@@ -111,7 +148,7 @@ int main() {
                 break;
             }
 
-            case 8: { 
+            case Menu::SHOW_CLIENT: {
                 std::string id;
                 std::cout << "\n[Client Lookup]\nPassport ID: ";
                 std::cin >> id;
@@ -119,7 +156,7 @@ int main() {
                 break;
             }
 
-            case 9: { 
+            case Menu::FIND_EXACT: {
                 double price, area;
                 std::string loc;
                 std::cout << "\n[Exact Match Search]\n";
@@ -130,37 +167,39 @@ int main() {
                 break;
             }
 
-            case 10: {
+            case Menu::FIND_BY_PRICE: {
                 double minP, maxP;
                 std::string type;
                 std::cout << "\n[Price Range Search — Offers Only]\n";
                 std::cout << "Min Price: "; std::cin >> minP;
                 std::cout << "Max Price: "; std::cin >> maxP;
                 if (minP > maxP) {
-                    std::cout << " Min price > Max price. Swapping...\n";
+                    std::cout << Config::MSG_PRICE_SWAP;
                     std::swap(minP, maxP);
                 }
                 std::cout << "Property Type (House / Apartment / [Enter] for all): ";
                 std::cin >> type;
-                if (type == "-" || type == "all" || type.empty()) type = "";
+                if (type == "-" || type == "all" || type.empty()) {
+                    type = "";
+                }
                 db.findOffersByPriceRange(minP, maxP, type);
                 break;
             }
 
-            case 11: 
+            case Menu::SHOW_PROFIT:
                 std::cout << "\n[Profit Summary]\n";
                 db.showProfit();
                 break;
 
-            case 12: 
+            case Menu::SHOW_POPULAR:
                 std::cout << "\n[Most Popular Requests]\n";
                 db.showMostPopularRequests();
                 break;
 
-            case 0: // Exit
-                std::cout << "\n Saving data...\n";
+            case Menu::EXIT:
+                std::cout << Config::MSG_SAVING << "\n";
                 db.saveToFile();
-                std::cout << " Goodbye!\n";
+                std::cout << Config::MSG_GOODBYE << "\n";
                 return 0;
 
             default:
