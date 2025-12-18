@@ -29,11 +29,12 @@ public:
 
     void findRequestByParams(double price, const std::string& location, double area) const;
 
-    
     void findOffersByPriceRange(double minPrice, double maxPrice, const std::string& type = "") const;
 
     void showProfit() const;
     void showMostPopularRequests() const;
+
+    void listUniqueProperties() const;
 
     void saveToFile() const;
     void loadFromFile();
