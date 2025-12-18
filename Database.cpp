@@ -204,4 +204,7 @@ void Database::listRequests() const {
                   << " at " << r->getProperty()->getLocation()
                   << ", Price: " << r->getPrice() << "\n";
     }
+    void Database::listUniqueProperties() const {
+    company->listUniqueProperties();
+}
 }
