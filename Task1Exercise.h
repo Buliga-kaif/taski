@@ -3,17 +3,28 @@
  */
 
 #pragma once
-#include "Exercise.h"
+#include "Matrix.h" 
 
 namespace miit::algebra
 {
     /**
      * @brief Реализация задания 1.
      */
-    class Task1Exercise : public Exercise
+    class Task1Exercise
     {
     public:
-        Task1Exercise(Matrix<int>& mat, Generator* g);
-        void Task() override;
+        /**
+         * @brief Конструктор.
+         * @param mat Массив, в котором нужно выполнить задачу.
+         */
+        explicit Task1Exercise(Matrix<int>& mat);
+
+        /**
+         * @brief Выполняет задание 1.
+         */
+        void Task();
+
+    private:
+        Matrix<int>& matrix; 
     };
 }
