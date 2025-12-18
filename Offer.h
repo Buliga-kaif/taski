@@ -7,18 +7,24 @@
 /**
  * @brief Класс, представляющий предложение недвижимости.
  *
- * Наследуется от Request.
+ * Наследуется от Request и реализует виртуальные методы.
  */
 class Offer : public Request {
 public:
     /**
      * @brief Конструктор предложения.
      * @param prop Объект недвижимости.
-     * @param p Цена.
+     * @param p Цена, по которой владелец хочет продать.
      */
-    Offer(std::shared_ptr<Property> prop, double p);
+    using Request::Request;  
 
-    std::string getType() const override;
+    RequestType getEnumType() const override {
+        return RequestType::Offer;
+    }
+
+    std::string getType() const override {
+        return "Offer";
+    }
 };
 
-#endif
+#endif 
