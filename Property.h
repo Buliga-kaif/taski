@@ -3,6 +3,7 @@
 #define PROPERTY_H
 
 #include <string>
+#include <memory>
 
 enum class PropertyType {
     House,
@@ -27,6 +28,22 @@ public:
 
     virtual std::string getType() const = 0;
     virtual PropertyType getEnumType() const = 0;
+};
+struct PropertyComparator {
+    bool operator()(const std::shared_ptr<Property>& a,
+                    const std::shared_ptr<Property>& b) const {
+        if (!a && !b) return false;
+        if (!a) return true;
+        if (!b) return false;
+
+        if (a->getType() != b->getType())
+            return a->getType() < b->getType();
+        if (a->getLocation() != b->getLocation())
+            return a->getLocation() < b->getLocation();
+        if (a->getArea() != b->getArea())
+            return a->getArea() < b->getArea();
+        return a->getPrice() < b->getPrice();
+    }
 };
 
 #endif 
