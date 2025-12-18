@@ -3,8 +3,8 @@
 #include <iostream>
 #include <sstream>
 #include "House.h"
-#include "Demand.h"
 #include "Apartment.h"
+#include "Demand.h"
 #include "Offer.h"
 
 Database::Database(const std::string& file, double commission)
@@ -16,13 +16,14 @@ void Database::addClient(const std::string& id, const std::string& name) {
     auto client = std::make_shared<Client>(id, name);
     clients.push_back(client);
     company->addClient(client);
-    std::cout << "Client added: " << name << " with ID: " << id << "\n";
+    std::cout << "Client added: " << name << " (ID: " << id << ")\n";
 }
 
 void Database::addRequest(std::shared_ptr<Request> request) {
     requests.push_back(request);
     company->addRequest(request);
-    std::cout << "Request added: " << request->getType() << " for " << request->getProperty()->getType() << "\n";
+    std::cout << "Request added: " << request->getType()
+              << " for " << request->getProperty()->getType() << "\n";
 }
 
 void Database::showAllOffers(const std::string& type) const {
@@ -41,13 +42,38 @@ void Database::findRequestByParams(double price, const std::string& location, do
     auto results = company->findRequests(price, location, area);
     if (results.empty()) {
         std::cout << "No matching requests found.\n";
-    }
-    else {
-        std::cout << "Found matching requests:\n";
+    } else {
+        std::cout << "Found " << results.size() << " matching request(s):\n";
         for (const auto& req : results) {
-            std::cout << req->getType() << " for " << req->getProperty()->getType() << " at " << req->getProperty()->getLocation()
-                << ", Price: " << req->getPrice() << "\n";
+            std::cout << "- " << req->getType()
+                      << " for " << req->getProperty()->getType()
+                      << " at " << req->getProperty()->getLocation()
+                      << ", Price: " << req->getPrice() << "\n";
         }
+    }
+}
+
+
+void Database::findOffersByPriceRange(double minPrice, double maxPrice, const std::string& type) const {
+    auto offers = company->findOffersByPriceRange(minPrice, maxPrice, type);
+    if (offers.empty()) {
+        std::cout << "No offers found in price range [" << minPrice << ", " << maxPrice << "]";
+        if (!type.empty()) std::cout << " for type '" << type << "'";
+        std::cout << ".\n";
+        return;
+    }
+
+    std::cout << "Found " << offers.size() << " offer(s) in range ["
+              << minPrice << ", " << maxPrice << "]";
+    if (!type.empty()) std::cout << " for type '" << type << "'";
+    std::cout << ":\n";
+
+    for (const auto& req : offers) {
+        auto prop = req->getProperty();
+        std::cout << " - " << prop->getType()
+                  << " at " << prop->getLocation()
+                  << ", area: " << prop->getArea() << " m²"
+                  << ", price: " << req->getPrice() << "\n";
     }
 }
 
@@ -61,9 +87,11 @@ void Database::showMostPopularRequests() const {
         std::cout << "No requests available.\n";
         return;
     }
-    std::cout << "Most Popular Requests:\n";
+    std::cout << "Most Popular Requests (" << popular.size() << "):\n";
     for (const auto& req : popular) {
-        std::cout << req->getType() << " for " << req->getProperty()->getType() << " at " << req->getProperty()->getLocation() << "\n";
+        std::cout << "- " << req->getType()
+                  << " for " << req->getProperty()->getType()
+                  << " at " << req->getProperty()->getLocation() << "\n";
     }
 }
 
@@ -82,11 +110,11 @@ void Database::saveToFile() const {
     file << "=== Requests ===\n";
     for (const auto& r : requests) {
         file << r->getType() << ","
-            << r->getProperty()->getType() << ","
-            << r->getProperty()->getLocation() << ","
-            << r->getProperty()->getArea() << ","
-            << r->getProperty()->getPrice() << ","
-            << r->getPrice() << "\n";
+             << r->getProperty()->getType() << ","
+             << r->getProperty()->getLocation() << ","
+             << r->getProperty()->getArea() << ","
+             << r->getProperty()->getPrice() << ","
+             << r->getPrice() << "\n";
     }
 
     file.close();
@@ -103,18 +131,17 @@ void Database::loadFromFile() {
     std::string line;
     bool readingRequests = false;
 
-    while (getline(file, line)) {
+    while (std::getline(file, line)) {
         if (line == "=== Requests ===") {
             readingRequests = true;
             continue;
         }
-
         if (line.empty() || line[0] == '=') continue;
 
         std::istringstream iss(line);
         std::string token;
         std::vector<std::string> tokens;
-        while (getline(iss, token, ',')) {
+        while (std::getline(iss, token, ',')) {
             tokens.push_back(token);
         }
 
@@ -122,7 +149,7 @@ void Database::loadFromFile() {
             addClient(tokens[0], tokens[1]);
         }
         else if (readingRequests && tokens.size() >= 6) {
-            std::string type = tokens[0];
+            std::string reqType = tokens[0];
             std::string propType = tokens[1];
             std::string location = tokens[2];
             double area = std::stod(tokens[3]);
@@ -132,16 +159,16 @@ void Database::loadFromFile() {
             std::shared_ptr<Property> prop;
             if (propType == "House") {
                 prop = std::make_shared<House>(location, area, propPrice);
-            }
-            else if (propType == "Apartment") {
+            } else if (propType == "Apartment") {
                 prop = std::make_shared<Apartment>(location, area, propPrice);
+            } else {
+                continue;
             }
 
             std::shared_ptr<Request> req;
-            if (type == "Demand") {
+            if (reqType == "Demand") {
                 req = std::make_shared<Demand>(prop, reqPrice);
-            }
-            else if (type == "Offer") {
+            } else if (reqType == "Offer") {
                 req = std::make_shared<Offer>(prop, reqPrice);
             }
 
@@ -157,6 +184,10 @@ void Database::loadFromFile() {
 
 void Database::listClients() const {
     std::cout << "\n--- Clients ---\n";
+    if (clients.empty()) {
+        std::cout << "No clients.\n";
+        return;
+    }
     for (const auto& c : clients) {
         std::cout << "ID: " << c->getPassportId() << ", Name: " << c->getFullName() << "\n";
     }
@@ -164,8 +195,13 @@ void Database::listClients() const {
 
 void Database::listRequests() const {
     std::cout << "\n--- Requests ---\n";
+    if (requests.empty()) {
+        std::cout << "No requests.\n";
+        return;
+    }
     for (const auto& r : requests) {
-        std::cout << r->getType() << " for " << r->getProperty()->getType() << " at " << r->getProperty()->getLocation()
-            << ", Price: " << r->getPrice() << "\n";
+        std::cout << r->getType() << " for " << r->getProperty()->getType()
+                  << " at " << r->getProperty()->getLocation()
+                  << ", Price: " << r->getPrice() << "\n";
     }
 }
