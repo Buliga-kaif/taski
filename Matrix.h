@@ -18,7 +18,7 @@ namespace miit {
             explicit Matrix(size_t sz);
             Matrix(const Matrix& other);
             Matrix(Matrix&& other) noexcept;
-            Matrix& operator=(const Matrix& other);
+            Matrix& operator=(const Matrix&& other);
             Matrix& operator=(Matrix&& other) noexcept;
             ~Matrix();
 
