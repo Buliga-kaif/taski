@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef PROPERTY_H
 #define PROPERTY_H
@@ -26,8 +25,8 @@ public:
     virtual double getArea() const { return area; }
     virtual double getPrice() const { return price; }
 
-    virtual std::string getType() const = 0;  
-    virtual PropertyType getEnumType() const = 0; 
+    virtual std::string getType() const = 0;
+    virtual PropertyType getEnumType() const = 0;
 };
 
-#endif
+#endif 
