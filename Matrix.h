@@ -15,15 +15,15 @@ namespace miit {
 
         public:
             Matrix();
-            explicit Matrix(size_t sz);
+            explicit Matrix(const size_t sz);
             Matrix(const Matrix& other);
             Matrix(Matrix&& other) noexcept;
-            Matrix& operator=(const Matrix&& other);
+            Matrix& operator=( Matrix&& other);
             Matrix& operator=(Matrix&& other) noexcept;
             ~Matrix();
 
-            T& operator[](size_t index);
-            const T& operator[](size_t index) const;
+            T& operator[](const size_t index);
+            const T& operator[](const size_t index) const;
 
             void fill(const T& value);
             std::string toString() const;
@@ -36,7 +36,7 @@ namespace miit {
         Matrix<T>::Matrix() : data(nullptr), size(0) {}
 
         template<typename T>
-        Matrix<T>::Matrix(size_t sz) : size(sz)
+        Matrix<T>::Matrix(const size_t sz) : size(sz)
         {
             if (size > 0) {
                 data = new T[size];
@@ -106,14 +106,14 @@ namespace miit {
         }
 
         template<typename T>
-        T& Matrix<T>::operator[](size_t index)
+        T& Matrix<T>::operator[](const size_t index)
         {
             if (index >= size) throw std::out_of_range("Index out of bounds");
             return data[index];
         }
 
         template<typename T>
-        const T& Matrix<T>::operator[](size_t index) const
+        const T& Matrix<T>::operator[](const size_t index) const
         {
             if (index >= size) throw std::out_of_range("Index out of bounds");
             return data[index];
