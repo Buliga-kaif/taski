@@ -26,8 +26,8 @@ public:
     virtual double getArea() const { return area; }
     virtual double getPrice() const { return price; }
 
-    virtual std::string getType() const = 0;  // pure virtual
-    virtual PropertyType getEnumType() const = 0; // для switch-friendly идентификации
+    virtual std::string getType() const = 0;  
+    virtual PropertyType getEnumType() const = 0; 
 };
 
 #endif
