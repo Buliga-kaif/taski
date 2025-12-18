@@ -12,7 +12,7 @@ namespace miit::algebra
 
     public:
         Exercise(Matrix<int>& mat, Generator* g);
-        virtual ~Exercise();
+        virtual ~Exercise() = default;
         virtual void Task() = 0;
     };
 }
